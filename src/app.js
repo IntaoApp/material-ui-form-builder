@@ -18,6 +18,7 @@ ReactDOM.render(
         onChange={(values) => console.log(values)}
         fields={fields}
         values={{name: 'test', limit: 10}}
+        errors={{limit: 'This field is required.'}}
       />
     </MuiThemeProvider>
   </div>,
