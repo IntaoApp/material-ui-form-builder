@@ -33,6 +33,7 @@ ReactDOM.render(
         onChange={(values) => console.log(values)}
         fields={fields}
         values={{name: 'test', limit: 10}}
+        errors={{limit: 'This field is required.'}}
       />
     </MuiThemeProvider>
   </div>,
@@ -79,6 +80,7 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `mixed` | | The default value for the field |
+| disabled | `bool` | | Set true to disable the field |
 | items | `array` | | The list for select items. |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
@@ -121,6 +123,7 @@ Example:
 ## Properties
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
+| errors | `object` | | The object to show errors by field. Example: `{name: 'This field is required.'}` |
 | focusStyle | `object` | |The style object to use to override floating label styles when focused. |
 | handleChange | `function` | | Callback function that is fired when one of the field's value changes. Signature: `function(field: string, value: mixed) => void` |
 | onChange | `function` | | Callback function that is fired when the form values changes. Signature: `function(values: object) => void` |
