@@ -192,13 +192,12 @@ export default class Form extends React.Component {
           uploadSuccess: field.uploadSuccess,
           chooseAndUpload: true
         }
-
         return (
-          <div>
+          <Box>
             <label
               style={{
                 fontSize: 16,
-                lineHeight: 24,
+                lineHeight: '24px',
                 width: '100%',
                 display: 'inline-block',
                 position: 'relative',
@@ -223,7 +222,7 @@ export default class Form extends React.Component {
                 />
               </FileUpload>
             </div>
-          </div>
+          </Box>
         );
       }
     }
@@ -258,8 +257,7 @@ export default class Form extends React.Component {
     return (
       <VBox style={this.style}>
         <FieldContainer
-          className="ts-mbox ts-sbox"
-          style={{margin: 20, overflow: 'auto', ...this.props.fieldContainerStyle}}
+          style={{overflow: 'auto', ...this.props.fieldContainerStyle}}
           flex={1}
           wrap={this.props.wrap}
         >
