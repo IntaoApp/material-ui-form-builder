@@ -193,7 +193,7 @@ export default class Form extends React.Component {
           chooseAndUpload: true
         }
         return (
-          <Box>
+          <div>
             <label
               style={{
                 fontSize: 16,
@@ -222,7 +222,7 @@ export default class Form extends React.Component {
                 />
               </FileUpload>
             </div>
-          </Box>
+          </div>
         );
       }
     }
