@@ -10,6 +10,10 @@ const fields = [
 ]
 const muiTheme = getMuiTheme({});
 
+const saveForm = (values) => {
+  console.log(values);
+}
+
 ReactDOM.render(
   <div>
     <MuiThemeProvider muiTheme={muiTheme}>
@@ -18,6 +22,7 @@ ReactDOM.render(
         onChange={(values) => console.log(values)}
         fields={fields}
         values={{name: 'test', limit: 10}}
+        saveForm={saveForm}
         errors={{limit: 'This field is required.'}}
       />
     </MuiThemeProvider>

@@ -22,6 +22,13 @@ export default class Form extends React.Component {
     width: "100%",
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      values: this.props.values
+    };
+  }
+
   DEFAULT_IMG = this.props.defaultImage || 'http://via.placeholder.com/50x50';
   underlineFocusStyle = this.props.focusStyle || {};
   floatingLabelFocusStyle = this.props.focusStyle || {};
