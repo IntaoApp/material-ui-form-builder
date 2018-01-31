@@ -127,6 +127,7 @@ Example:
 | focusStyle | `object` | |The style object to use to override floating label styles when focused. |
 | handleChange | `function` | | Callback function that is fired when one of the field's value changes. Signature: `function(field: string, value: mixed) => void` |
 | onChange | `function` | | Callback function that is fired when the form values changes. Signature: `function(values: object) => void` |
+| saveForm | `function` | | If this property passed to the component then a save button is displayed. Callback function that is fired when click to save button. Signature: `function(values: object) => void` |
 | values | `object` | | The values for the form fields |
 
 

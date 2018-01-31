@@ -265,7 +265,11 @@ export default class Form extends React.Component {
         </FieldContainer>
         <Box style={{justifyContent: 'center', ...this.props.actionContainerStyle}}>
           {this.props.saveForm &&
-            <FlatButton secondary={true} label="Save" onClick={this.props.saveForm} />
+            <FlatButton
+              secondary={true}
+              label="Save"
+              onClick={() => this.props.saveForm(this.state.values)}
+            />
           }
           {this.props.deleteItem &&
             <FlatButton label="Delete" secondary={true} onClick={this.props.deleteItem} />
