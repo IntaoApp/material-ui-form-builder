@@ -123,10 +123,13 @@ Example:
 ## Properties
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
+| delayTime | `number` | | In case when you would like to fire a delayed event about value changes. |
+| delayTriggers | `array` | | The field elements that fire the onDelayedChange callback when these fields are changed, delayed by the delayTime prop. Every other field has 0 delay time. |
 | errors | `object` | | The object to show errors by field. Example: `{name: 'This field is required.'}` |
 | focusStyle | `object` | |The style object to use to override floating label styles when focused. |
 | handleChange | `function` | | Callback function that is fired when one of the field's value changes. Signature: `function(field: string, value: mixed) => void` |
 | onChange | `function` | | Callback function that is fired when the form values changes. Signature: `function(values: object) => void` |
+| onDelayedChange | `function` | | Callback function that is fired delayed when the form values changes. Signature: `function(values: object) => void` |
 | saveForm | `function` | | If this property passed to the component then a save button is displayed. Callback function that is fired when click to save button. Signature: `function(values: object) => void` |
 | values | `object` | | The values for the form fields |
 
