@@ -12,9 +12,11 @@ import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 
+
 export default class Form extends React.Component {
 
   state = {
+    timeout: null,
     values: {}
   }
 
@@ -34,12 +36,33 @@ export default class Form extends React.Component {
   floatingLabelFocusStyle = this.props.focusStyle || {};
 
   handleChange = (field, value) => {
+    if (this.state.timeout) {
+      clearTimeout(this.state.timeout);
+      this.setState({timeout: null}, () => this.setChanges(field, value));
+    } else {
+      this.setChanges(field, value);
+    }
+  }
+
+  setChanges = (field, value) => {
     if (this.props.handleChange) {
       this.props.handleChange(field, value);
     }
     const values = {...this.props.values, ...this.state.values, [field]:value};
     this.setState(
-      {values}
+      {values}, () => {
+        if (!this.props.delayTime || !this.props.onDelayedChange) {
+          return false;
+        }
+        let time = 0;
+        if (_.includes(this.props.delayTriggers, field)) {
+          time = this.props.delayTime;
+        }
+        const timeout = setTimeout(() => {
+          this.props.onDelayedChange(values);
+        }, time)
+        this.setState({timeout});
+      }
     );
     if (this.props.onChange) {
       this.props.onChange(values);

@@ -20,6 +20,9 @@ ReactDOM.render(
       <Form
         fieldContainerStyle={{backgroundColor: '#fefefe', padding: 10}}
         onChange={(values) => console.log(values)}
+        delayTime={300}
+        delayTriggers={['name', 'limit']}
+        onDelayedChange={(values)=>console.log('delayed values: ', values)}
         fields={fields}
         values={{name: 'test', limit: 10}}
         saveForm={saveForm}
