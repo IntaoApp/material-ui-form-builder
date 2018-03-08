@@ -3,26 +3,24 @@ import _ from 'lodash';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import Checkbox from 'material-ui/Checkbox';
-import Box, {VBox} from 'react-layout-components'
-import ChipInput from 'material-ui-chip-input'
+import Box, { VBox } from 'react-layout-components';
+import ChipInput from 'material-ui-chip-input';
 import SelectField from 'material-ui/SelectField';
 const FileUpload = require('react-fileupload');
 import MenuItem from 'material-ui/MenuItem';
 import DateTimePicker from 'material-ui-datetimepicker';
-import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog'
+import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 
-
 export default class Form extends React.Component {
-
   state = {
     timeout: null,
     values: {}
-  }
+  };
 
   style = {
-    width: "100%",
-  }
+    width: '100%'
+  };
 
   constructor(props) {
     super(props);
@@ -38,55 +36,53 @@ export default class Form extends React.Component {
   handleChange = (field, value) => {
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
-      this.setState({timeout: null}, () => this.setChanges(field, value));
+      this.setState({ timeout: null }, () => this.setChanges(field, value));
     } else {
       this.setChanges(field, value);
     }
-  }
+  };
 
   setChanges = (field, value) => {
     if (this.props.handleChange) {
       this.props.handleChange(field, value);
     }
-    const values = {...this.props.values, ...this.state.values, [field]:value};
-    this.setState(
-      {values}, () => {
-        if (!this.props.delayTime || !this.props.onDelayedChange) {
-          return false;
-        }
-        let time = 0;
-        if (_.includes(this.props.delayTriggers, field)) {
-          time = this.props.delayTime;
-        }
-        const timeout = setTimeout(() => {
-          this.props.onDelayedChange(values);
-        }, time)
-        this.setState({timeout});
+    const values = { ...this.props.values, ...this.state.values, [field]: value };
+    this.setState({ values }, () => {
+      if (!this.props.delayTime || !this.props.onDelayedChange) {
+        return false;
       }
-    );
+      let time = 0;
+      if (_.includes(this.props.delayTriggers, field)) {
+        time = this.props.delayTime;
+      }
+      const timeout = setTimeout(() => {
+        this.props.onDelayedChange(values);
+      }, time);
+      this.setState({ timeout });
+    });
     if (this.props.onChange) {
       this.props.onChange(values);
     }
-  }
+  };
 
   getProperty = (key, defaultValue, formDefault) => {
     const componentDefault = _.get(this.props.values, key);
     return _.get(this.state.values, key, componentDefault || defaultValue || formDefault);
-  }
+  };
 
-  getName = (name) => {
+  getName = name => {
     return _.replace(name, /\./g, ' ');
-  }
+  };
 
   getItems = (items, parentKey) => {
-    return items.map((item) =>{
+    return items.map(item => {
       let key = item.key || item.value || 'key';
       key = `${parentKey}-${key}`;
-      return (<MenuItem value={item.value} key={key} primaryText={item.title} />);
+      return <MenuItem value={item.value} key={key} primaryText={item.title} />;
     });
-  }
+  };
 
-  getField = (field) => {
+  getField = field => {
     const key = field.key || field.name || 'key';
     const type = field.type || 'text';
     const defaultValue = field.default || null;
@@ -96,22 +92,22 @@ export default class Form extends React.Component {
     const errors = this.props.errors;
     const disabled = field.disabled || false;
     const empty = field.empty || false;
-    let errorText = "";
+    let errorText = '';
     if (_.get(errors, key)) {
       errorText = errors[key];
     }
-    switch(type) {
+    switch (type) {
       case 'text':
         return (
           <TextField
             key={inputKey}
             hintText={this.getName(name)}
             floatingLabelText={this.getName(name)}
-            style={{ width: "100%"}}
+            style={{ width: '100%' }}
             underlineFocusStyle={this.underlineFocusStyle}
             floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-            value={this.getProperty(key, defaultValue, "")}
-            onChange={(event) => this.handleChange(key, event.target.value)}
+            value={this.getProperty(key, defaultValue, '')}
+            onChange={event => this.handleChange(key, event.target.value)}
             errorText={errorText}
           />
         );
@@ -121,13 +117,13 @@ export default class Form extends React.Component {
             key={inputKey}
             hintText={this.getName(name)}
             floatingLabelText={this.getName(name)}
-            style={{width: "100%"}}
+            style={{ width: '100%' }}
             underlineFocusStyle={this.underlineFocusStyle}
             floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-            inputStyle={{marginTop:3}}
-            floatingLabelStyle={{top: 40}}
-            value={this.getProperty(key, defaultValue, "")}
-            onChange={(event) => this.handleChange(key, event.target.value)}
+            inputStyle={{ marginTop: 3 }}
+            floatingLabelStyle={{ top: 40 }}
+            value={this.getProperty(key, defaultValue, '')}
+            onChange={event => this.handleChange(key, event.target.value)}
             multiLine={true}
             rows={field.rows || 1}
             rowsMax={field.rowsMax || 2}
@@ -144,10 +140,9 @@ export default class Form extends React.Component {
             floatingLabelFocusStyle={this.floatingLabelFocusStyle}
             floatingLabelText={name}
             value={this.getProperty(key, defaultValue, 0)}
-            onChange={(event) => this.handleChange(key, parseInt(event.target.value))}
+            onChange={event => this.handleChange(key, parseInt(event.target.value))}
             errorText={errorText}
           />
-
         );
       case 'select':
         return (
@@ -158,42 +153,42 @@ export default class Form extends React.Component {
             underlineFocusStyle={this.underlineFocusStyle}
             floatingLabelFocusStyle={this.floatingLabelFocusStyle}
             style={this.style}
-            value={this.getProperty(key, defaultValue, "")}
+            value={this.getProperty(key, defaultValue, '')}
             onChange={(event, index, value) => this.handleChange(key, value)}
             maxHeight={200}
             errorText={errorText}
             disabled={disabled}
           >
-            {empty &&
-            <MenuItem value={null} primaryText="" />
-            }
+            {empty && <MenuItem value={null} primaryText="" />}
             {items}
           </SelectField>
-        )
+        );
       case 'datetime':
         return (
           <DateTimePicker
             DatePicker={DatePickerDialog}
             TimePicker={TimePickerDialog}
-            format='YYYY-MM-DD HH:mm'
-            timeFormat='24hr'
+            format="YYYY-MM-DD HH:mm"
+            timeFormat="24hr"
             returnMomentDate={true}
-            onChange={(value) => {this.handleChange(key, value.format('YYYY-MM-DD HH:mm:ss'))}}
+            onChange={value => {
+              this.handleChange(key, value.format('YYYY-MM-DD HH:mm:ss'));
+            }}
             key={inputKey}
             hintText={this.getName(name)}
             floatingLabelText={this.getName(name)}
             style={this.style}
-            value={this.getProperty(key, defaultValue, "")}
+            value={this.getProperty(key, defaultValue, '')}
             errorText={errorText}
           />
-        )
+        );
 
       case 'checkbox':
         return (
           <Checkbox
             label={this.getName(name)}
             checked={this.getProperty(key, defaultValue, false)}
-            onCheck={(event, isChecked) => this.handleChange(key,isChecked)}
+            onCheck={(event, isChecked) => this.handleChange(key, isChecked)}
             errorText={errorText}
           />
         );
@@ -206,10 +201,10 @@ export default class Form extends React.Component {
             hintText={this.getName(name)}
             floatingLabelText={this.getName(name)}
             underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelStyle={{color: "rgba(0, 0, 0, 0.3)"}}
+            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
             fullWidth
-            onRequestAdd={(chip) => this.handleAddChip(key, value, chip)}
-            onRequestDelete={(chip) => this.handleDeleteChip(key, value, chip)}
+            onRequestAdd={chip => this.handleAddChip(key, value, chip)}
+            onRequestDelete={chip => this.handleDeleteChip(key, value, chip)}
             errorText={errorText}
           />
         );
@@ -221,7 +216,7 @@ export default class Form extends React.Component {
           fileFieldName: 'files',
           uploadSuccess: field.uploadSuccess,
           chooseAndUpload: true
-        }
+        };
         return (
           <div>
             <label
@@ -236,19 +231,20 @@ export default class Form extends React.Component {
                 transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
                 cursor: 'text',
                 marginTop: 14,
-                color: 'rgba(0, 0, 0, 0.3)',
+                color: 'rgba(0, 0, 0, 0.3)'
               }}
-            >{this.getName(name)}</label>
-            <div style={{cursor: 'pointer'}}>
-              <FileUpload options={options} >
+            >
+              {this.getName(name)}
+            </label>
+            <div style={{ cursor: 'pointer' }}>
+              <FileUpload options={options}>
                 <img
                   ref="chooseAndUpload"
-                  src={
-                    this.getProperty(key, defaultImg, "" )+ "?" +
-                    new Date().getTime()
-                  }
-                  onError={(e)=>{e.target.src=this.DEFAULT_IMG}}
-                  style={{width:50, height: 50}}
+                  src={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
+                  onError={e => {
+                    e.target.src = this.DEFAULT_IMG;
+                  }}
+                  style={{ width: 50, height: 50 }}
                 />
               </FileUpload>
             </div>
@@ -256,28 +252,25 @@ export default class Form extends React.Component {
         );
       }
     }
-  }
+  };
 
   handleAddChip = (key, value, chip) => {
     this.handleChange(key, _.concat(value, chip));
-  }
+  };
 
   handleDeleteChip = (key, value, chip) => {
     this.handleChange(key, _.without(value, chip));
-  }
+  };
 
   getFields = () => {
-    return this.props.fields.map((field, index)=>{
+    return this.props.fields.map((field, index) => {
       return (
-        <div
-          key={`form-field-container-${index}`}
-          style={this.props.inputContainerStyle}
-        >
+        <div key={`form-field-container-${index}`} style={this.props.inputContainerStyle}>
           {this.getField(field)}
         </div>
-      )
+      );
     });
-  }
+  };
 
   render() {
     let FieldContainer = VBox;
@@ -286,27 +279,16 @@ export default class Form extends React.Component {
     }
     return (
       <VBox style={this.style}>
-        <FieldContainer
-          style={{overflow: 'auto', ...this.props.fieldContainerStyle}}
-          flex={1}
-          wrap={this.props.wrap}
-        >
+        <FieldContainer style={{ overflow: 'auto', ...this.props.fieldContainerStyle }} flex={1} wrap={this.props.wrap}>
           {this.getFields()}
         </FieldContainer>
-        <Box style={{justifyContent: 'center', ...this.props.actionContainerStyle}}>
-          {this.props.saveForm &&
-            <FlatButton
-              secondary={true}
-              label="Save"
-              onClick={() => this.props.saveForm(this.state.values)}
-            />
-          }
-          {this.props.deleteItem &&
-            <FlatButton label="Delete" secondary={true} onClick={this.props.deleteItem} />
-          }
+        <Box style={{ justifyContent: 'center', ...this.props.actionContainerStyle }}>
+          {this.props.saveForm && (
+            <FlatButton secondary={true} label="Save" onClick={() => this.props.saveForm(this.state.values)} />
+          )}
+          {this.props.deleteItem && <FlatButton label="Delete" secondary={true} onClick={this.props.deleteItem} />}
         </Box>
       </VBox>
     );
   }
-
 }
