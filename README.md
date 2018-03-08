@@ -48,6 +48,7 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `string` | | The default value for the field |
+| disabled | `bool` | | Set true to disable the field |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 
@@ -58,6 +59,7 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `number` | | The default value for the field |
+| disabled | `bool` | | Set true to disable the field |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 | rows | `number` | 1 | Number of rows to display |
@@ -70,6 +72,7 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `string` | | The default value for the field |
+| disabled | `bool` | | Set true to disable the field |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 
@@ -92,6 +95,7 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `date` | | The default value for the field |
+| disabled | `bool` | | Set true to disable the field |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 
@@ -102,6 +106,7 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `mixed` | | The default value for the field |
+| disabled | `bool` | | Set true to disable the field |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 

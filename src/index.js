@@ -109,6 +109,7 @@ export default class Form extends React.Component {
             value={this.getProperty(key, defaultValue, '')}
             onChange={event => this.handleChange(key, event.target.value)}
             errorText={errorText}
+            disabled={disabled}
           />
         );
       case 'multiLineText':
@@ -128,6 +129,7 @@ export default class Form extends React.Component {
             rows={field.rows || 1}
             rowsMax={field.rowsMax || 2}
             errorText={errorText}
+            disabled={disabled}
           />
         );
       case 'number':
@@ -142,6 +144,7 @@ export default class Form extends React.Component {
             value={this.getProperty(key, defaultValue, 0)}
             onChange={event => this.handleChange(key, parseInt(event.target.value))}
             errorText={errorText}
+            disabled={disabled}
           />
         );
       case 'select':
@@ -180,6 +183,7 @@ export default class Form extends React.Component {
             style={this.style}
             value={this.getProperty(key, defaultValue, '')}
             errorText={errorText}
+            disabled={disabled}
           />
         );
 
@@ -190,6 +194,7 @@ export default class Form extends React.Component {
             checked={this.getProperty(key, defaultValue, false)}
             onCheck={(event, isChecked) => this.handleChange(key, isChecked)}
             errorText={errorText}
+            disabled={disabled}
           />
         );
       case 'chip': {
