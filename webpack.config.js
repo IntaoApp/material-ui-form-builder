@@ -1,10 +1,14 @@
 const webpack = require('webpack');
 
 const client = {
-  entry: './src/app.js',
+  entry: ['babel-polyfill', './src/app.js'],
   output: {
     filename: 'bundle.js',
     path: __dirname
+  },
+  devServer: {
+    contentBase: __dirname,
+    historyApiFallback: true
   },
   node: {
     console: true,
@@ -13,10 +17,13 @@ const client = {
     tls: 'empty'
   },
   module: {
-    loaders: [{
-      loader: 'babel-loader',
-      test: /\.js?/,
-    }]
+    loaders: [
+      {
+        loader: 'babel-loader',
+        test: /\.js?/,
+        exclude: /node_modules/
+      }
+    ]
   }
 };
 
