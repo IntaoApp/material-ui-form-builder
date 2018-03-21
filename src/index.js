@@ -92,6 +92,7 @@ export default class Form extends React.Component {
     const errors = this.props.errors;
     const disabled = field.disabled || false;
     const empty = field.empty || false;
+    const multiple = field.multiple || false;
     let errorText = '';
     if (_.get(errors, key)) {
       errorText = errors[key];
@@ -161,6 +162,7 @@ export default class Form extends React.Component {
             maxHeight={200}
             errorText={errorText}
             disabled={disabled}
+            multiple = {multiple}
           >
             {empty && <MenuItem value={null} primaryText="" />}
             {items}

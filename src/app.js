@@ -7,6 +7,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 const fields = [
   {name: 'name',  type: 'text'},
   {name: 'limit', type: 'number'},
+  {name: 'select', type: 'select', items: [{value: 1, title: 'first item'},{value: 2, title: 'second item'}], multiple : true }
 ]
 const muiTheme = getMuiTheme({});
 

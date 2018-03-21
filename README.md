@@ -86,6 +86,7 @@ Example:
 | disabled | `bool` | | Set true to disable the field |
 | items | `array` | | The list for select items. |
 | key | `string` | `key` | The identifier in the values object |
+| multiple | `bool` | `false` | Will support multiple selections, if value is trues |
 | name | `string` | `field` | The label of the field |
 
 ### datetime
