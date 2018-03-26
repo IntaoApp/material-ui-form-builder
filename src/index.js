@@ -195,7 +195,6 @@ export default class Form extends React.Component {
             label={this.getName(name)}
             checked={this.getProperty(key, defaultValue, false)}
             onCheck={(event, isChecked) => this.handleChange(key, isChecked)}
-            errorText={errorText}
             disabled={disabled}
           />
         );
