@@ -75,10 +75,14 @@ export default class Form extends React.Component {
   };
 
   getItems = (items, parentKey) => {
+    const values = items.map(item => item.value);
     return items.map(item => {
       let key = item.key || item.value || 'key';
       key = `${parentKey}-${key}`;
-      return <MenuItem value={item.value} key={key} primaryText={item.title} />;
+      return <MenuItem
+        value={item.value} key={key} primaryText={item.title}
+        checked={values && values.indexOf(name) > -1}
+      />;
     });
   };
 
