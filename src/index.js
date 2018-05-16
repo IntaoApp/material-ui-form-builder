@@ -117,6 +117,22 @@ export default class Form extends React.Component {
             disabled={disabled}
           />
         );
+      case 'password':
+          return (
+            <TextField
+              key={inputKey}
+              hintText={this.getName(name)}
+              floatingLabelText={this.getName(name)}
+              type="password"
+              style={{ width: '100%' }}
+              underlineFocusStyle={this.underlineFocusStyle}
+              floatingLabelFocusStyle={this.floatingLabelFocusStyle}
+              value={this.getProperty(key, defaultValue, '')}
+              onChange={event => this.handleChange(key, event.target.value)}
+              errorText={errorText}
+              disabled={disabled}
+            />
+          );
       case 'multiLineText':
         return (
           <TextField
