@@ -216,6 +216,7 @@ export default class Form extends React.Component {
             checked={this.getProperty(key, defaultValue, false)}
             onCheck={(event, isChecked) => this.handleChange(key, isChecked)}
             disabled={disabled}
+            style={{ marginTop: '15px' }}
           />
         );
       case 'chip': {
