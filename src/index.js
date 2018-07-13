@@ -7,6 +7,9 @@ import Box, { VBox } from 'react-layout-components';
 import ChipInput from 'material-ui-chip-input';
 import SelectField from 'material-ui/SelectField';
 const FileUpload = require('react-fileupload');
+
+import RaisedButton from 'material-ui/RaisedButton';
+import FineUploaderTraditional from 'fine-uploader-wrappers'
 import MenuItem from 'material-ui/MenuItem';
 import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
@@ -244,22 +247,23 @@ export default class Form extends React.Component {
           uploadSuccess: field.uploadSuccess,
           chooseAndUpload: true
         };
+        const imageStyle = {
+          fontSize: 16,
+          lineHeight: '24px',
+          width: '100%',
+          display: 'inline-block',
+          position: 'relative',
+          backgroundColor: 'transparent',
+          fontFamily: 'Roboto, sans-serif',
+          transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+          cursor: 'text',
+          marginTop: 14,
+          color: 'rgba(0, 0, 0, 0.3)'
+        }
         return (
           <div>
             <label
-              style={{
-                fontSize: 16,
-                lineHeight: '24px',
-                width: '100%',
-                display: 'inline-block',
-                position: 'relative',
-                backgroundColor: 'transparent',
-                fontFamily: 'Roboto, sans-serif',
-                transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-                cursor: 'text',
-                marginTop: 14,
-                color: 'rgba(0, 0, 0, 0.3)'
-              }}
+              style={imageStyle}
             >
               {this.getName(name)}
             </label>
@@ -274,6 +278,91 @@ export default class Form extends React.Component {
                   style={{ width: 50, height: 50 }}
                 />
               </FileUpload>
+            </div>
+          </div>
+        );
+      }
+      case 'image2': {
+        const defaultImg = defaultValue || this.DEFAULT_IMG;
+        const options = {
+          baseUrl: field.resource,
+          fileFieldName: 'files',
+          uploadSuccess: field.uploadSuccess,
+          chooseAndUpload: true
+        };
+        const imageLabelStyle = {
+          fontSize: 16,
+          lineHeight: '24px',
+          width: '100%',
+          display: 'inline-block',
+          position: 'relative',
+          backgroundColor: 'transparent',
+          fontFamily: 'Roboto, sans-serif',
+          transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+          cursor: 'text',
+          marginTop: 14,
+          color: 'rgba(0, 0, 0, 0.3)'
+        }
+
+        const imageStyle = {
+          display: 'block',
+          marginBottom: 10,
+          width: 50,
+          height: 50
+        }
+        if (_.get(field, 'position') === 'flex') {
+          imageStyle.width = '100%';
+          imageStyle.height = 150;
+          imageStyle.objectFit = 'cover';
+        }
+
+        const uploader = new FineUploaderTraditional({
+          options: {
+            request: {
+              endpoint: _.get(field, 'resource'),
+              multiple: false,
+              inputName: 'file',
+            },
+            callbacks: {
+              onComplete(id, name, response) {
+                if (response.success) {
+                  return onSuccess(name, true);
+                }
+                return onError(name, response);
+              }
+            }
+          }
+        });
+
+        return (
+          <div>
+            <label
+              style={imageLabelStyle}
+            >
+              {this.getName(name)}
+            </label>
+            <div style={{ cursor: 'pointer', width: '100%' }}>
+              <img
+                src={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
+                onError={e => {
+                  e.target.src = this.DEFAULT_IMG;
+                }}
+                style={imageStyle}
+              />
+              <RaisedButton
+                containerElement="label"
+                label="upload"
+                primary
+              >
+                <input
+                  type="file"
+                  style={{ display: 'none' }}
+                  accept="image/*"
+                  onChange={(onChangeEvent) => {
+                    uploader.methods.addFiles(onChangeEvent.target)
+                  }}
+                />
+              </RaisedButton>
             </div>
           </div>
         );
