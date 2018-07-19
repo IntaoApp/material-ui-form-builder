@@ -284,12 +284,6 @@ export default class Form extends React.Component {
       }
       case 'image2': {
         const defaultImg = defaultValue || this.DEFAULT_IMG;
-        const options = {
-          baseUrl: field.resource,
-          fileFieldName: 'files',
-          uploadSuccess: field.uploadSuccess,
-          chooseAndUpload: true
-        };
         const imageLabelStyle = {
           fontSize: 16,
           lineHeight: '24px',
@@ -326,9 +320,9 @@ export default class Form extends React.Component {
             callbacks: {
               onComplete(id, name, response) {
                 if (response.success) {
-                  return onSuccess(name, true);
+                  return field.onSuccess(name, true);
                 }
-                return onError(name, response);
+                return field.onError(name, response);
               }
             }
           }
