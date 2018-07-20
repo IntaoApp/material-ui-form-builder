@@ -320,9 +320,11 @@ export default class Form extends React.Component {
             callbacks: {
               onComplete(id, name, response) {
                 if (response.success) {
-                  return field.onSuccess(name, true);
+                  this.setState({})
+                  this.handleChange(key, _.get(field, 'prefix') + name);
+                  return _.get(field, 'onSuccess', ()=>{})(name, true);
                 }
-                return field.onError(name, response);
+                return _.get(field, 'onError', ()=>{})(name, response);
               }
             }
           }
