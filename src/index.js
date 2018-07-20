@@ -318,9 +318,8 @@ export default class Form extends React.Component {
               inputName: 'file',
             },
             callbacks: {
-              onComplete(id, name, response) {
+              onComplete: (id, name, response) => {
                 if (response.success) {
-                  this.setState({})
                   this.handleChange(key, _.get(field, 'prefix') + name);
                   return _.get(field, 'onSuccess', ()=>{})(name, true);
                 }
