@@ -16,10 +16,6 @@ import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 
 export default class Form extends React.Component {
-  state = {
-    timeout: null,
-    values: {}
-  };
 
   style = {
     width: '100%'
@@ -28,7 +24,10 @@ export default class Form extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      values: this.props.values
+      values: this.props.values,
+      emojiPickerOpen: false,
+      timeout: null,
+      index: 0,
     };
   }
 
