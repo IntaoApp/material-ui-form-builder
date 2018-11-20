@@ -19,8 +19,10 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@material-ui/icons": "3.0.1",
     "babel-core": "^6.26.0",
     "babel-polyfill": "6.16.0",
+    "emoji-picker-react": "2.1.1",
     "fine-uploader": "5.16.2",
     "fine-uploader-wrappers": "1.0.1",
     "jest": "21.2.1",
