@@ -15,6 +15,10 @@ import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 
+import IconButton from 'material-ui/IconButton'
+import Smile from 'material-ui/svg-icons/social/mood'
+import EmojiPicker from 'emoji-picker-react';
+
 export default class Form extends React.Component {
 
   style = {
@@ -43,6 +47,16 @@ export default class Form extends React.Component {
       this.setChanges(field, value);
     }
   };
+
+  getPickedEmoji = (field, emoji) => {
+    const pickedEmoji = String.fromCodePoint(`0x${emoji}`);	
+    const { values } = this.state;
+    this.setChanges(field, values[field] + pickedEmoji);
+  }
+
+  handleEmojiPicker = () => {
+    this.setState({ emojiPickerOpen: !this.state.emojiPickerOpen});
+  }
 
   setChanges = (field, value) => {
     if (this.props.handleChange) {
@@ -99,7 +113,10 @@ export default class Form extends React.Component {
     const disabled = field.disabled || false;
     const empty = field.empty || false;
     const multiple = field.multiple || false;
+    const addEmoji = field.addEmoji || false;
+
     let errorText = '';
+
     if (_.get(errors, key)) {
       errorText = errors[key];
     }
@@ -137,23 +154,39 @@ export default class Form extends React.Component {
           );
       case 'multiLineText':
         return (
-          <TextField
-            key={inputKey}
-            hintText={this.getName(name)}
-            floatingLabelText={this.getName(name)}
-            style={{ width: '100%' }}
-            underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-            inputStyle={{ marginTop: 3 }}
-            floatingLabelStyle={{ top: 40 }}
-            value={this.getProperty(key, defaultValue, '')}
-            onChange={event => this.handleChange(key, event.target.value)}
-            multiLine={true}
-            rows={field.rows || 1}
-            rowsMax={field.rowsMax || 2}
-            errorText={errorText}
-            disabled={disabled}
-          />
+          <div>
+            <div style={{
+                display: "flex",
+                alignItems: "flex-end",
+                }}>
+              <TextField
+                key={inputKey}
+                hintText={this.getName(name)}
+                floatingLabelText={this.getName(name)}
+                style={{ width: '100%' }}
+                underlineFocusStyle={this.underlineFocusStyle}
+                floatingLabelFocusStyle={this.floatingLabelFocusStyle}
+                inputStyle={{ marginTop: 3 }}
+                floatingLabelStyle={{ top: 40 }}
+                value={this.getProperty(key, defaultValue, '')}
+                onChange={event => this.handleChange(key, event.target.value)}
+                multiLine={true}
+                rows={field.rows || 1}
+                rowsMax={field.rowsMax || 2}
+                errorText={errorText}
+                disabled={disabled}
+              />
+              {addEmoji ? 
+                <div>
+                  <IconButton onClick={() => this.handleEmojiPicker()}>
+                    <Smile color='grey'/>
+                  </IconButton>
+                </div>
+                : null
+              }
+            </div>
+            { this.state.emojiPickerOpen ? <EmojiPicker onEmojiClick={ (emoji, emojiData) => this.getPickedEmoji(key, emoji)}/> : null }
+          </div>
         );
       case 'number':
         return (
