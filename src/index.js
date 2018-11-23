@@ -18,6 +18,7 @@ import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 import IconButton from 'material-ui/IconButton'
 import Smile from 'material-ui/svg-icons/social/mood'
 import EmojiPicker from 'emoji-picker-react';
+import EmojiConvertor from 'emoji-js';
 
 export default class Form extends React.Component {
 
@@ -39,19 +40,30 @@ export default class Form extends React.Component {
   underlineFocusStyle = this.props.focusStyle || {};
   floatingLabelFocusStyle = this.props.focusStyle || {};
 
+  handleEmojiText = (input) => {
+    var emoji = new EmojiConvertor();
+    return emoji.replace_colons(input);
+  }
+
   handleChange = (field, value) => {
+    const valueWithEmoji = this.handleEmojiText(value);
+
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
-      this.setState({ timeout: null }, () => this.setChanges(field, value));
+      this.setState({ timeout: null }, () => this.setChanges(field, valueWithEmoji  ));
     } else {
-      this.setChanges(field, value);
+      this.setChanges(field, valueWithEmoji );
     }
   };
 
-  getPickedEmoji = (field, emoji) => {
-    const pickedEmoji = String.fromCodePoint(`0x${emoji}`);	
-    const { values } = this.state;
-    this.setChanges(field, values[field] + pickedEmoji);
+  getPickedEmoji = (field, emojiData) => {
+    if(emojiData.name){
+      const pickedEmoji = `:${emojiData.name}:`;
+      const { values } = this.state;
+      this.handleChange(field, values[field] + pickedEmoji);
+    } else {
+      console.log("ERROR: Invalid emoji code: ", emojiData.name);
+    }
   }
 
   handleEmojiPicker = () => {
@@ -185,7 +197,7 @@ export default class Form extends React.Component {
                 : null
               }
             </div>
-            { this.state.emojiPickerOpen ? <EmojiPicker onEmojiClick={ (emoji, emojiData) => this.getPickedEmoji(key, emoji)}/> : null }
+            { this.state.emojiPickerOpen ? <EmojiPicker onEmojiClick={ (emoji, emojiData) => this.getPickedEmoji(key, emojiData)}/> : null }
           </div>
         );
       case 'number':
