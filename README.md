@@ -64,7 +64,7 @@ Example:
 | name | `string` | `field` | The label of the field |
 | rows | `number` | 1 | Number of rows to display |
 | rowsMax | `number` | 2 | Maximum number of rows to display |
-| addEmoji | `bool` | `false` | Set true to make visible the emoji-picker |
+| emoji | `bool` | `false` | Set true to make visible the emoji-picker |
 
 
 ### number
