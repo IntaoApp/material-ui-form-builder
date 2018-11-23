@@ -6,7 +6,7 @@ import getMuiTheme from 'material-ui/styles/getMuiTheme';
 
 const fields = [
   {name: 'image',  type: 'image2', position: 'flex', resource: '/test', uploadSuccess: () => console.log('upload')},
-  {name: 'name',  type: 'text'},
+  {name: 'name',  type: 'multiLineText', emoji: true },
   {name: 'limit', type: 'number'},
   {name: 'select', type: 'select', items: [{value: 1, title: 'first item'},{value: 2, title: 'second item'}], multiple : true },
 ]

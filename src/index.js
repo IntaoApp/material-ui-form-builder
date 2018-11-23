@@ -113,7 +113,7 @@ export default class Form extends React.Component {
     const disabled = field.disabled || false;
     const empty = field.empty || false;
     const multiple = field.multiple || false;
-    const addEmoji = field.addEmoji || false;
+    const emoji = field.emoji || false;
 
     let errorText = '';
 
@@ -176,7 +176,7 @@ export default class Form extends React.Component {
                 errorText={errorText}
                 disabled={disabled}
               />
-              {addEmoji ? 
+              {emoji ? 
                 <div>
                   <IconButton onClick={() => this.handleEmojiPicker()}>
                     <Smile color='grey'/>
