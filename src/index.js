@@ -44,26 +44,26 @@ export default class Form extends React.Component {
     if(_.isString(input)) {
       const emoji = new EmojiConvertor();
       return emoji.replace_colons(input);
-      }
-     else return input;
+    }
+    else return input;
   }
 
   handleChange = (field, value) => {
     const { fields } = this.props;
     const wholeField = fields.find(({name, key}) => name === field || key === field)
     
-    let valueConditionallyWithEmoji = value;
+    let transformedValue = value;
     if(wholeField && wholeField.emoji === true) {
       if(wholeField.type === 'text' || wholeField.type === 'multiLineText') {
-        valueConditionallyWithEmoji = this.handleEmojiText(value);
+        transformedValue = this.handleEmojiText(value);
       }
     }
 
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
-      this.setState({ timeout: null }, () => this.setChanges(field, valueConditionallyWithEmoji  ));
+      this.setState({ timeout: null }, () => this.setChanges(field, transformedValue));
     } else {
-      this.setChanges(field, valueConditionallyWithEmoji );
+      this.setChanges(field, transformedValue);
     }
   };
 
