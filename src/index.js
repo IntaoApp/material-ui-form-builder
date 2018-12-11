@@ -41,18 +41,29 @@ export default class Form extends React.Component {
   floatingLabelFocusStyle = this.props.focusStyle || {};
 
   handleEmojiText = (input) => {
-    var emoji = new EmojiConvertor();
-    return emoji.replace_colons(input);
+    if(_.isString(input)) {
+      const emoji = new EmojiConvertor();
+      return emoji.replace_colons(input);
+      }
+     else return input;
   }
 
   handleChange = (field, value) => {
-    const valueWithEmoji = this.handleEmojiText(value);
+    const { fields } = this.props;
+    const wholeField = fields.find(({name, key}) => name === field || key === field)
+    
+    let valueConditionallyWithEmoji = value;
+    if(wholeField && wholeField.emoji === true) {
+      if(wholeField.type === 'text' || wholeField.type === 'multiLineText') {
+        valueConditionallyWithEmoji = this.handleEmojiText(value);
+      }
+    }
 
     if (this.state.timeout) {
       clearTimeout(this.state.timeout);
-      this.setState({ timeout: null }, () => this.setChanges(field, valueWithEmoji  ));
+      this.setState({ timeout: null }, () => this.setChanges(field, valueConditionallyWithEmoji  ));
     } else {
-      this.setChanges(field, valueWithEmoji );
+      this.setChanges(field, valueConditionallyWithEmoji );
     }
   };
 
