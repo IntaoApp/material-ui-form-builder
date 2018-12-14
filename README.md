@@ -1,5 +1,21 @@
 # material-ui-form-builder
-This project is used by Lessence.One for build easily [Material-UI][mui] forms with every built-in or 3rd party material ui component like [material-ui-chip-input][muichip]. We continuously increase the number of components when we need it or by pull requests.
+This project is used by Intao (T-Shaped). Build [Material-UI][mui] forms easily with every built-in or 3rd party material ui component like [material-ui-chip-input][muichip]. We continuously increase the number of components when we need it or by pull requests.
+
+  * [Disclaimer](#disclaimer)
+  * [Installation](#installation)
+  * [Usage](#usage)
+  * [Form fields](#form-fields)
+    + [text](#text)
+    + [multiLineText](#multilinetext)
+    + [number](#number)
+    + [select](#select)
+    + [datetime](#datetime)
+    + [checkbox](#checkbox)
+    + [chip](#chip)
+  * [Form Properties](#form-properties)
+  * [Dialog](#dialog)
+    * [Properties of dialog](#properties-of-dialog)
+
 
 ## Disclaimer
 This is just a quick tentative try to create a component where we have form state management, form builder and  material ui. Later we would like to replace the quick solutions with existing ones to provide as many feature as we can.
@@ -52,6 +68,7 @@ Example:
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 
+
 ### multiLineText
 Example:
 ```{name: 'name',  type: 'multiLineText', rows: 5}```
@@ -90,6 +107,7 @@ Example:
 | key | `string` | `key` | The identifier in the values object |
 | multiple | `bool` | `false` | Will support multiple selections, if value is trues |
 | name | `string` | `field` | The label of the field |
+| dialog | `obj` |  | Trigger a dialog to cancel/confirm a form change. See [Dialog](#dialog) below. |
 
 ### datetime
 Example:
@@ -112,6 +130,7 @@ Example:
 | disabled | `bool` | | Set true to disable the field |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
+| dialog | `obj` |  | Trigger a dialog to cancel/confirm a form change. See [Dialog](#dialog) below. |
 
 ### chip
 Example:
@@ -128,7 +147,7 @@ Example:
 
 
 
-## Properties
+## Form Properties
 | Name | Type | Default | Description |
 | --- | --- | --- | --- |
 | delayTime | `number` | | In case when you would like to fire a delayed event about value changes. |
@@ -143,6 +162,28 @@ Example:
 
 
 Please open an issue if something is missing or does not work as expected.
+
+## Dialog
+Have a material-ui dialog triggered upon form change and allow the user to cancel or confirm, leading to a cancellation or confirmation of the form change internally and triggering of form state.
+
+Simply define a configuration object like so: `dialog = { type: 'cancel-confirm', mainText: 'Really?'}`
+
+And add it to your field configuration object, like so: ```{name: 'name',  type: 'select', items: [{value: 1, title: 'item'}], dialog}```
+
+Dialog can be added to any form component but is called upon every form state change and as such only makes sense on `select`, `checkbox` and other closed format form fields. 
+
+### Properties of dialog
+| Name | Type | Default | Required? | Description | 
+| --- | --- | --- | --- | --- |
+| type | "cancel-confirm" or "confirm" | "cancel-confirm" | no | "cancel-confirm" mode includes button (and functionality) for cancelling a form state change, "confirm" merely notifies the user and lets her her acknowledge |
+| title | `string`|  | no  | optional title |
+| mainText | `string`|  | **yes**  | main text |
+| renderCancel | `func`|  | no  | function that returns a component to render the cancel button, e.g. return a FlatButton component. `handleCancel` function gets passed in to be called e.g. onClick  |
+| renderConfirm | `func`|  | no  | function that returns a component to render the confirm button, e.g. return a FlatButton component. `handleConfirm` function gets passed in and needs to be called e.g. onClick  |
+| handleCancelCb | `func` | | no | allows you to pass in a function as callback that gets called on cancel. Gets `fieldName` and `fieldValue` passed in
+| handleConfirmCb | `func` | | no | allows you to pass in a function as callback that gets called on confirm. Gets `fieldName` and `fieldValue` passed in
+
+
 
 
 [mui]: http://www.material-ui.com/#/
