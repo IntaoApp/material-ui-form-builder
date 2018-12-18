@@ -7,6 +7,7 @@ import Box, { VBox } from 'react-layout-components';
 import ChipInput from 'material-ui-chip-input';
 import SelectField from 'material-ui/SelectField';
 const FileUpload = require('react-fileupload');
+import PropTypes from 'prop-types';
 
 import RaisedButton from 'material-ui/RaisedButton';
 import FineUploaderTraditional from 'fine-uploader-wrappers'
@@ -14,11 +15,16 @@ import MenuItem from 'material-ui/MenuItem';
 import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
+import Dialog from 'material-ui/Dialog';
 
 import IconButton from 'material-ui/IconButton'
 import Smile from 'material-ui/svg-icons/social/mood'
 import EmojiPicker from 'emoji-picker-react';
 import EmojiConvertor from 'emoji-js';
+
+const FieldDialog = (props) => (<Dialog 
+    {...props}
+  >{props.mainText}</Dialog>)
 
 export default class Form extends React.Component {
 
@@ -33,6 +39,7 @@ export default class Form extends React.Component {
       emojiPickerOpen: false,
       timeout: null,
       index: 0,
+      dialog: false,
     };
   }
 
@@ -48,6 +55,60 @@ export default class Form extends React.Component {
     else return input;
   }
 
+  handleDialog = (fieldName, fieldValue, dialogObj) => {
+    const handleCancelInternal = (fieldName, fieldValue, cancelCallback) => {
+      this.setState(({dialog}) => ({ dialog: {...dialog, open: false}}))
+      cancelCallback && cancelCallback(fieldName, fieldValue);
+    }
+    const handleConfirmInternal = (fieldName, fieldValue, confirmCallback) => {
+      this.setState(({dialog}) => ({ dialog: {...dialog, open: false}}))
+      this.setChanges(fieldName, fieldValue);
+      confirmCallback && confirmCallback(fieldName, fieldValue);
+    }
+
+    const renderCancelDefault = (handleCancel) => (<FlatButton
+      label="Cancel"
+      primary={true}
+      onClick={() => {handleCancel()}}
+      />)
+    const renderConfirmDefault = (handleConfirm) => (<FlatButton
+      label="OK"
+      primary={true}
+      onClick={() => {handleConfirm()}}
+      />)
+
+    const {
+      type = 'cancel-confirm',
+      title = false,
+      mainText,
+      renderCancel = renderCancelDefault,
+      handleCancelCallback,
+      renderConfirm = renderConfirmDefault,
+      handleConfirmCallback,
+    } = dialogObj;
+
+    const forbidAlternativeExit = {};
+    const actions = [];
+    if(type === 'cancel-confirm') {
+      forbidAlternativeExit.modal = true;
+      actions[0] = renderCancel(() => { handleCancelInternal( fieldName, fieldValue, handleCancelCallback) })
+      actions[1] = renderConfirm(() => { handleConfirmInternal( fieldName, fieldValue, handleConfirmCallback) })
+    }
+    else {
+      forbidAlternativeExit.modal = false;
+      actions[0] = renderConfirm(() => { handleConfirmInternal( fieldName, fieldValue, handleConfirmCallback) })
+    }
+
+    const dialog = {
+      title,
+      actions,
+      ...forbidAlternativeExit,
+      open: true,
+      mainText,
+    }
+    this.setState({ dialog });
+  }
+
   handleChange = (field, value) => {
     const { fields } = this.props;
     const wholeField = fields.find(({name, key}) => name === field || key === field)
@@ -59,11 +120,14 @@ export default class Form extends React.Component {
       }
     }
 
-    if (this.state.timeout) {
-      clearTimeout(this.state.timeout);
-      this.setState({ timeout: null }, () => this.setChanges(field, transformedValue));
-    } else {
-      this.setChanges(field, transformedValue);
+    if(wholeField.dialog) this.handleDialog(field,value,wholeField.dialog)
+    else {
+      if (this.state.timeout) {
+        clearTimeout(this.state.timeout);
+        this.setState({ timeout: null }, () => this.setChanges(field, transformedValue));
+      } else {
+        this.setChanges(field, transformedValue);
+      }
     }
   };
 
@@ -441,8 +505,10 @@ export default class Form extends React.Component {
     if (this.props.orientation === 'horizontal') {
       FieldContainer = Box;
     }
+    const { dialog } = this.state;
     return (
       <VBox style={this.style}>
+        {dialog && <FieldDialog {...dialog}/>}
         <FieldContainer style={{ overflow: 'auto', ...this.props.fieldContainerStyle }} flex={1} wrap={this.props.wrap}>
           {this.getFields()}
         </FieldContainer>
@@ -455,4 +521,18 @@ export default class Form extends React.Component {
       </VBox>
     );
   }
+}
+
+Form.propTypes = {
+  fields: PropTypes.arrayOf(PropTypes.shape({
+    dialog: PropTypes.shape({
+      type: PropTypes.oneOf(['cancel-confirm', 'confirm']),
+      title: PropTypes.string,
+      mainText: PropTypes.string.isRequired,
+      renderCancel: PropTypes.func,
+      handleCancelCallback: PropTypes.func,
+      renderConfirm: PropTypes.func,
+      handleConfirmCallback: PropTypes.func
+    })
+  })).isRequired,
 }
