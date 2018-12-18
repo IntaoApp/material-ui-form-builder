@@ -56,14 +56,14 @@ export default class Form extends React.Component {
   }
 
   handleDialog = (fieldName, fieldValue, dialogObj) => {
-    const handleCancelInternal = (fieldName, fieldValue, cancelCb) => {
+    const handleCancelInternal = (fieldName, fieldValue, cancelCallback) => {
       this.setState(({dialog}) => ({ dialog: {...dialog, open: false}}))
-      cancelCb && cancelCb(fieldName, fieldValue);
+      cancelCallback && cancelCallback(fieldName, fieldValue);
     }
-    const handleConfirmInternal = (fieldName, fieldValue, confirmCb) => {
+    const handleConfirmInternal = (fieldName, fieldValue, confirmCallback) => {
       this.setState(({dialog}) => ({ dialog: {...dialog, open: false}}))
       this.setChanges(fieldName, fieldValue);
-      confirmCb && confirmCb(fieldName, fieldValue);
+      confirmCallback && confirmCallback(fieldName, fieldValue);
     }
 
     const renderCancelDefault = (handleCancel) => (<FlatButton
@@ -82,27 +82,27 @@ export default class Form extends React.Component {
       title = false,
       mainText,
       renderCancel = renderCancelDefault,
-      handleCancelCb,
+      handleCancelCallback,
       renderConfirm = renderConfirmDefault,
-      handleConfirmCb,
+      handleConfirmCallback,
     } = dialogObj;
 
-    const noEscape = {};
+    const forbidAlternativeExit = {};
     const actions = [];
     if(type === 'cancel-confirm') {
-      noEscape.modal = true;
-      actions[0] = renderCancel(() => { handleCancelInternal( fieldName, fieldValue, handleCancelCb) })
-      actions[1] = renderConfirm(() => { handleConfirmInternal( fieldName, fieldValue, handleConfirmCb) })
+      forbidAlternativeExit.modal = true;
+      actions[0] = renderCancel(() => { handleCancelInternal( fieldName, fieldValue, handleCancelCallback) })
+      actions[1] = renderConfirm(() => { handleConfirmInternal( fieldName, fieldValue, handleConfirmCallback) })
     }
     else {
-      noEscape.modal = false;
-      actions[0] = renderConfirm(() => { handleConfirmInternal( fieldName, fieldValue, handleConfirmCb) })
+      forbidAlternativeExit.modal = false;
+      actions[0] = renderConfirm(() => { handleConfirmInternal( fieldName, fieldValue, handleConfirmCallback) })
     }
 
     const dialog = {
       title,
       actions,
-      ...noEscape,
+      ...forbidAlternativeExit,
       open: true,
       mainText,
     }
@@ -530,9 +530,9 @@ Form.propTypes = {
       title: PropTypes.string,
       mainText: PropTypes.string.isRequired,
       renderCancel: PropTypes.func,
-      handleCancelCb: PropTypes.func,
+      handleCancelCallback: PropTypes.func,
       renderConfirm: PropTypes.func,
-      handleConfirmCb: PropTypes.func
+      handleConfirmCallback: PropTypes.func
     })
   })).isRequired,
 }
