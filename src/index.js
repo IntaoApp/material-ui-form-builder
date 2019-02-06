@@ -51,7 +51,7 @@ export default class Form extends React.Component {
   handleChange = (field, value) => {
     const { fields } = this.props;
     const wholeField = fields.find(({name, key}) => name === field || key === field)
-    
+
     let transformedValue = value;
     if(wholeField && wholeField.emoji === true) {
       if(wholeField.type === 'text' || wholeField.type === 'multiLineText') {
@@ -71,7 +71,7 @@ export default class Form extends React.Component {
     const pickedEmoji = `:${emojiData.name}:`;
     const { values } = this.state;
 
-    pickedEmoji ? this.handleChange(field, values[field] + pickedEmoji) 
+    pickedEmoji ? this.handleChange(field, values[field] + pickedEmoji)
                 : console.log("ERROR: Invalid emoji code");
   }
 
@@ -197,7 +197,7 @@ export default class Form extends React.Component {
                 errorText={errorText}
                 disabled={disabled}
               />
-              {emoji ? 
+              {emoji ?
                 <div>
                   <IconButton onClick={() => this.handleEmojiPicker()}>
                     <Smile color='grey'/>
@@ -415,6 +415,72 @@ export default class Form extends React.Component {
           </div>
         );
       }
+      case 'video': {
+        const defaultImg = defaultValue || this.DEFAULT_IMG;
+        const videoLabelStyle = {
+          fontSize: 16,
+          lineHeight: '24px',
+          width: '100%',
+          display: 'inline-block',
+          position: 'relative',
+          backgroundColor: 'transparent',
+          fontFamily: 'Roboto, sans-serif',
+          transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
+          cursor: 'text',
+          marginTop: 14,
+          color: 'rgba(0, 0, 0, 0.3)'
+        }
+
+        const uploader = new FineUploaderTraditional({
+          options: {
+            request: {
+              endpoint: _.get(field, 'resource'),
+              multiple: false,
+              inputName: 'file',
+            },
+            callbacks: {
+              onComplete: (id, name, response) => {
+                if (response.success) {
+                  this.handleChange(key, _.get(field, 'prefix') + name);
+                  return _.get(field, 'onSuccess', ()=>{})(name, true);
+                }
+                return _.get(field, 'onError', ()=>{})(name, response);
+              }
+            }
+          }
+        });
+
+        return (
+          <div>
+            <label
+              style={videoLabelStyle}
+            >
+              {this.getName(name)}
+            </label>
+            <div style={{ cursor: 'pointer', width: '100%' }}>
+              <div style={{marginTop: 10, marginBottom: 10}}>
+                Uploaded video:
+                <a href={this.getProperty(key, defaultValue, '')} style={{paddingLeft: 10}}>{this.getProperty(key, defaultValue, '')}</a>
+              </div>
+              <RaisedButton
+                containerElement="label"
+                label="upload"
+                primary
+              >
+                <input
+                  type="file"
+                  style={{ display: 'none' }}
+                  accept="video/*"
+                  onChange={(onChangeEvent) => {
+                    uploader.methods.addFiles(onChangeEvent.target)
+                  }}
+                />
+              </RaisedButton>
+            </div>
+          </div>
+        );
+      }
+
     }
   };
 
