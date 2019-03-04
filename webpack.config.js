@@ -1,7 +1,7 @@
 const webpack = require('webpack');
 
 const client = {
-  entry: ['babel-polyfill', './src/app.js'],
+  entry: ['@babel/polyfill', './src/app.js'],
   output: {
     filename: 'bundle.js',
     path: __dirname
