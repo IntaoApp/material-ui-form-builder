@@ -9,21 +9,20 @@ import SelectField from 'material-ui/SelectField';
 const FileUpload = require('react-fileupload');
 
 import RaisedButton from 'material-ui/RaisedButton';
-import FineUploaderTraditional from 'fine-uploader-wrappers'
+import FineUploaderTraditional from 'fine-uploader-wrappers';
 import MenuItem from 'material-ui/MenuItem';
 import DateTimePicker from 'material-ui-datetimepicker';
 import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
 import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
 
-import IconButton from 'material-ui/IconButton'
-import Smile from 'material-ui/svg-icons/social/mood'
+import IconButton from 'material-ui/IconButton';
+import Smile from 'material-ui/svg-icons/social/mood';
 import EmojiPicker from 'emoji-picker-react';
 import EmojiConvertor from 'emoji-js';
 
 export default class Form extends React.Component {
-
   style = {
-    width: '100%'
+    width: '100%',
   };
 
   constructor(props) {
@@ -41,20 +40,19 @@ export default class Form extends React.Component {
   floatingLabelFocusStyle = this.props.focusStyle || {};
 
   handleEmojiText = (input) => {
-    if(_.isString(input)) {
+    if (_.isString(input)) {
       const emoji = new EmojiConvertor();
       return emoji.replace_colons(input);
-    }
-    else return input;
-  }
+    } else return input;
+  };
 
   handleChange = (field, value) => {
     const { fields } = this.props;
-    const wholeField = fields.find(({name, key}) => name === field || key === field)
+    const wholeField = fields.find(({ name, key }) => name === field || key === field);
 
     let transformedValue = value;
-    if(wholeField && wholeField.emoji === true) {
-      if(wholeField.type === 'text' || wholeField.type === 'multiLineText') {
+    if (wholeField && wholeField.emoji === true) {
+      if (wholeField.type === 'text' || wholeField.type === 'multiLineText') {
         transformedValue = this.handleEmojiText(value);
       }
     }
@@ -71,13 +69,14 @@ export default class Form extends React.Component {
     const pickedEmoji = `:${emojiData.name}:`;
     const { values } = this.state;
 
-    pickedEmoji ? this.handleChange(field, values[field] + pickedEmoji)
-                : console.log("ERROR: Invalid emoji code");
-  }
+    pickedEmoji
+      ? this.handleChange(field, values[field] + pickedEmoji)
+      : console.log('ERROR: Invalid emoji code');
+  };
 
   handleEmojiPicker = () => {
-    this.setState({ emojiPickerOpen: !this.state.emojiPickerOpen});
-  }
+    this.setState({ emojiPickerOpen: !this.state.emojiPickerOpen });
+  };
 
   setChanges = (field, value) => {
     if (this.props.handleChange) {
@@ -107,23 +106,27 @@ export default class Form extends React.Component {
     return _.get(this.state.values, key, componentDefault || defaultValue || formDefault);
   };
 
-  getName = name => {
+  getName = (name) => {
     return _.replace(name, /\./g, ' ');
   };
 
   getItems = (items, parentKey) => {
-    const values = items.map(item => item.value);
-    return items.map(item => {
+    const values = items.map((item) => item.value);
+    return items.map((item) => {
       let key = item.key || item.value || 'key';
       key = `${parentKey}-${key}`;
-      return <MenuItem
-        value={item.value} key={key} primaryText={item.title}
-        checked={values && values.indexOf(name) > -1}
-      />;
+      return (
+        <MenuItem
+          value={item.value}
+          key={key}
+          primaryText={item.title}
+          checked={values && values.indexOf(name) > -1}
+        />
+      );
     });
   };
 
-  getField = field => {
+  getField = (field) => {
     const key = field.key || field.name || 'key';
     const type = field.type || 'text';
     const defaultValue = field.default || null;
@@ -152,34 +155,36 @@ export default class Form extends React.Component {
             underlineFocusStyle={this.underlineFocusStyle}
             floatingLabelFocusStyle={this.floatingLabelFocusStyle}
             value={this.getProperty(key, defaultValue, '')}
-            onChange={event => this.handleChange(key, event.target.value)}
+            onChange={(event) => this.handleChange(key, event.target.value)}
             errorText={errorText}
             disabled={disabled}
           />
         );
       case 'password':
-          return (
-            <TextField
-              key={inputKey}
-              hintText={this.getName(name)}
-              floatingLabelText={this.getName(name)}
-              type="password"
-              style={{ width: '100%' }}
-              underlineFocusStyle={this.underlineFocusStyle}
-              floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-              value={this.getProperty(key, defaultValue, '')}
-              onChange={event => this.handleChange(key, event.target.value)}
-              errorText={errorText}
-              disabled={disabled}
-            />
-          );
+        return (
+          <TextField
+            key={inputKey}
+            hintText={this.getName(name)}
+            floatingLabelText={this.getName(name)}
+            type="password"
+            style={{ width: '100%' }}
+            underlineFocusStyle={this.underlineFocusStyle}
+            floatingLabelFocusStyle={this.floatingLabelFocusStyle}
+            value={this.getProperty(key, defaultValue, '')}
+            onChange={(event) => this.handleChange(key, event.target.value)}
+            errorText={errorText}
+            disabled={disabled}
+          />
+        );
       case 'multiLineText':
         return (
           <div>
-            <div style={{
-                display: "flex",
-                alignItems: "flex-end",
-                }}>
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'flex-end',
+              }}
+            >
               <TextField
                 key={inputKey}
                 hintText={this.getName(name)}
@@ -190,23 +195,26 @@ export default class Form extends React.Component {
                 inputStyle={{ marginTop: 3 }}
                 floatingLabelStyle={{ top: 40 }}
                 value={this.getProperty(key, defaultValue, '')}
-                onChange={event => this.handleChange(key, event.target.value)}
+                onChange={(event) => this.handleChange(key, event.target.value)}
                 multiLine={true}
                 rows={field.rows || 1}
                 rowsMax={field.rowsMax || 2}
                 errorText={errorText}
                 disabled={disabled}
               />
-              {emoji ?
+              {emoji ? (
                 <div>
                   <IconButton onClick={() => this.handleEmojiPicker()}>
-                    <Smile color='grey'/>
+                    <Smile color="grey" />
                   </IconButton>
                 </div>
-                : null
-              }
+              ) : null}
             </div>
-            { this.state.emojiPickerOpen ? <EmojiPicker onEmojiClick={ (emoji, emojiData) => this.getPickedEmoji(key, emojiData)}/> : null }
+            {this.state.emojiPickerOpen ? (
+              <EmojiPicker
+                onEmojiClick={(emoji, emojiData) => this.getPickedEmoji(key, emojiData)}
+              />
+            ) : null}
           </div>
         );
       case 'number':
@@ -219,7 +227,7 @@ export default class Form extends React.Component {
             floatingLabelFocusStyle={this.floatingLabelFocusStyle}
             floatingLabelText={name}
             value={this.getProperty(key, defaultValue, 0)}
-            onChange={event => this.handleChange(key, parseInt(event.target.value))}
+            onChange={(event) => this.handleChange(key, parseInt(event.target.value))}
             errorText={errorText}
             disabled={disabled}
           />
@@ -238,7 +246,7 @@ export default class Form extends React.Component {
             maxHeight={200}
             errorText={errorText}
             disabled={disabled}
-            multiple = {multiple}
+            multiple={multiple}
           >
             {empty && <MenuItem value={null} primaryText="" />}
             {items}
@@ -252,7 +260,7 @@ export default class Form extends React.Component {
             format="YYYY-MM-DD HH:mm"
             timeFormat="24hr"
             returnMomentDate={true}
-            onChange={value => {
+            onChange={(value) => {
               this.handleChange(key, value.format('YYYY-MM-DD HH:mm:ss'));
             }}
             key={inputKey}
@@ -286,8 +294,8 @@ export default class Form extends React.Component {
             underlineFocusStyle={this.underlineFocusStyle}
             floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
             fullWidth
-            onRequestAdd={chip => this.handleAddChip(key, value, chip)}
-            onRequestDelete={chip => this.handleDeleteChip(key, value, chip)}
+            onRequestAdd={(chip) => this.handleAddChip(key, value, chip)}
+            onRequestDelete={(chip) => this.handleDeleteChip(key, value, chip)}
             errorText={errorText}
           />
         );
@@ -298,7 +306,7 @@ export default class Form extends React.Component {
           baseUrl: field.resource,
           fileFieldName: 'files',
           uploadSuccess: field.uploadSuccess,
-          chooseAndUpload: true
+          chooseAndUpload: true,
         };
         const imageStyle = {
           fontSize: 16,
@@ -311,21 +319,17 @@ export default class Form extends React.Component {
           transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
           cursor: 'text',
           marginTop: 14,
-          color: 'rgba(0, 0, 0, 0.3)'
-        }
+          color: 'rgba(0, 0, 0, 0.3)',
+        };
         return (
           <div>
-            <label
-              style={imageStyle}
-            >
-              {this.getName(name)}
-            </label>
+            <label style={imageStyle}>{this.getName(name)}</label>
             <div style={{ cursor: 'pointer' }}>
               <FileUpload options={options}>
                 <img
                   ref="chooseAndUpload"
                   src={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
-                  onError={e => {
+                  onError={(e) => {
                     e.target.src = this.DEFAULT_IMG;
                   }}
                   style={{ width: 50, height: 50 }}
@@ -348,15 +352,15 @@ export default class Form extends React.Component {
           transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
           cursor: 'text',
           marginTop: 14,
-          color: 'rgba(0, 0, 0, 0.3)'
-        }
+          color: 'rgba(0, 0, 0, 0.3)',
+        };
 
         const imageStyle = {
           display: 'block',
           marginBottom: 10,
           width: 50,
-          height: 50
-        }
+          height: 50,
+        };
         if (_.get(field, 'position') === 'flex') {
           imageStyle.width = '100%';
           imageStyle.height = 150;
@@ -374,40 +378,32 @@ export default class Form extends React.Component {
               onComplete: (id, name, response) => {
                 if (response.success) {
                   this.handleChange(key, _.get(field, 'prefix') + name);
-                  return _.get(field, 'onSuccess', ()=>{})(name, true);
+                  return _.get(field, 'onSuccess', () => {})(name, true);
                 }
-                return _.get(field, 'onError', ()=>{})(name, response);
-              }
-            }
-          }
+                return _.get(field, 'onError', () => {})(name, response);
+              },
+            },
+          },
         });
 
         return (
           <div>
-            <label
-              style={imageLabelStyle}
-            >
-              {this.getName(name)}
-            </label>
+            <label style={imageLabelStyle}>{this.getName(name)}</label>
             <div style={{ cursor: 'pointer', width: '100%' }}>
               <img
                 src={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
-                onError={e => {
+                onError={(e) => {
                   e.target.src = this.DEFAULT_IMG;
                 }}
                 style={imageStyle}
               />
-              <RaisedButton
-                containerElement="label"
-                label="upload"
-                primary
-              >
+              <RaisedButton containerElement="label" label="upload" primary>
                 <input
                   type="file"
                   style={{ display: 'none' }}
                   accept="image/*"
                   onChange={(onChangeEvent) => {
-                    uploader.methods.addFiles(onChangeEvent.target)
+                    uploader.methods.addFiles(onChangeEvent.target);
                   }}
                 />
               </RaisedButton>
@@ -428,8 +424,8 @@ export default class Form extends React.Component {
           transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
           cursor: 'text',
           marginTop: 14,
-          color: 'rgba(0, 0, 0, 0.3)'
-        }
+          color: 'rgba(0, 0, 0, 0.3)',
+        };
 
         const uploader = new FineUploaderTraditional({
           options: {
@@ -442,37 +438,31 @@ export default class Form extends React.Component {
               onComplete: (id, name, response) => {
                 if (response.success) {
                   this.handleChange(key, _.get(field, 'prefix') + name);
-                  return _.get(field, 'onSuccess', ()=>{})(name, true);
+                  return _.get(field, 'onSuccess', () => {})(name, true);
                 }
-                return _.get(field, 'onError', ()=>{})(name, response);
-              }
-            }
-          }
+                return _.get(field, 'onError', () => {})(name, response);
+              },
+            },
+          },
         });
 
         return (
           <div>
-            <label
-              style={videoLabelStyle}
-            >
-              {this.getName(name)}
-            </label>
+            <label style={videoLabelStyle}>{this.getName(name)}</label>
             <div style={{ cursor: 'pointer', width: '100%' }}>
-              <div style={{marginTop: 10, marginBottom: 10}}>
+              <div style={{ marginTop: 10, marginBottom: 10 }}>
                 Uploaded video:
-                <a href={this.getProperty(key, defaultValue, '')} style={{paddingLeft: 10}}>{this.getProperty(key, defaultValue, '')}</a>
+                <a href={this.getProperty(key, defaultValue, '')} style={{ paddingLeft: 10 }}>
+                  {this.getProperty(key, defaultValue, '')}
+                </a>
               </div>
-              <RaisedButton
-                containerElement="label"
-                label="upload"
-                primary
-              >
+              <RaisedButton containerElement="label" label="upload" primary>
                 <input
                   type="file"
                   style={{ display: 'none' }}
                   accept="video/*"
                   onChange={(onChangeEvent) => {
-                    uploader.methods.addFiles(onChangeEvent.target)
+                    uploader.methods.addFiles(onChangeEvent.target);
                   }}
                 />
               </RaisedButton>
@@ -480,7 +470,6 @@ export default class Form extends React.Component {
           </div>
         );
       }
-
     }
   };
 
@@ -509,14 +498,24 @@ export default class Form extends React.Component {
     }
     return (
       <VBox style={this.style}>
-        <FieldContainer style={{ overflow: 'auto', ...this.props.fieldContainerStyle }} flex={1} wrap={this.props.wrap}>
+        <FieldContainer
+          style={{ overflow: 'auto', ...this.props.fieldContainerStyle }}
+          flex={1}
+          wrap={this.props.wrap}
+        >
           {this.getFields()}
         </FieldContainer>
         <Box style={{ justifyContent: 'center', ...this.props.actionContainerStyle }}>
           {this.props.saveForm && (
-            <FlatButton secondary={true} label="Save" onClick={() => this.props.saveForm(this.state.values)} />
+            <FlatButton
+              secondary={true}
+              label="Save"
+              onClick={() => this.props.saveForm(this.state.values)}
+            />
           )}
-          {this.props.deleteItem && <FlatButton label="Delete" secondary={true} onClick={this.props.deleteItem} />}
+          {this.props.deleteItem && (
+            <FlatButton label="Delete" secondary={true} onClick={this.props.deleteItem} />
+          )}
         </Box>
       </VBox>
     );
