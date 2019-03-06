@@ -4,18 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
     "compile": "rm -f index.js && babel ./src -d ./ --ignore node_modules,src/index.test.js",
     "prepare": "npm run compile",
     "dev": "webpack-dev-server",
     "prettier-watch": "onchange \"src/**/*.js\" -- prettier --write --single-quote --print-width=100 --arrow-parens=always  --trailing-comma=es5 --tab-width=2 {{changed}}"
-  },
-  "jest": {
-    "transform": {
-      "^.+\\.js$": "./node_modules/babel-jest"
-    },
-    "testRegex": ".*\\.test\\.js$"
   },
   "author": "",
   "license": "ISC",
@@ -26,7 +18,6 @@
     "emoji-picker-react": "2.1.1",
     "fine-uploader": "5.16.2",
     "fine-uploader-wrappers": "1.0.1",
-    "jest": "21.2.1",
     "lodash": "4.16.6",
     "material-ui": "0.20.1",
     "material-ui-chip-input": "0.18.2",
@@ -45,7 +36,6 @@
     "@babel/preset-react": "7.0.0",
     "@babel/register": "7.0.0",
     "@babel/runtime": "7.3.4",
-    "babel-jest": "24.1.0",
     "babel-loader": "8.0.5",
     "onchange": "5.2.0",
     "webpack": "2.6.1",
