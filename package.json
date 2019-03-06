@@ -8,7 +8,8 @@
     "test:watch": "jest --watch",
     "compile": "rm -f index.js && babel ./src -d ./ --ignore node_modules,src/index.test.js",
     "prepare": "npm run compile",
-    "dev": "webpack-dev-server"
+    "dev": "webpack-dev-server",
+    "prettier-watch": "onchange \"src/**/*.js\" -- prettier --write --single-quote --print-width=100 --arrow-parens=always  --trailing-comma=es5 --tab-width=2 {{changed}}"
   },
   "jest": {
     "transform": {
@@ -30,6 +31,7 @@
     "material-ui": "0.20.1",
     "material-ui-chip-input": "0.18.2",
     "material-ui-datetimepicker": "1.0.5",
+    "prettier": "1.15.3",
     "react": "15.4.0",
     "react-dom": "15.4.0",
     "react-fileupload": "2.4.0",
@@ -45,6 +47,7 @@
     "@babel/runtime": "7.3.4",
     "babel-jest": "24.1.0",
     "babel-loader": "8.0.5",
+    "onchange": "5.2.0",
     "webpack": "2.6.1",
     "webpack-dev-server": "2.4.5"
   }
