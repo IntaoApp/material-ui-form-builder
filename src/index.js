@@ -69,9 +69,12 @@ export default class Form extends React.Component {
     const pickedEmoji = `:${emojiData.name}:`;
     const { values } = this.state;
 
-    pickedEmoji
-      ? this.handleChange(field, values[field] + pickedEmoji)
-      : console.log('ERROR: Invalid emoji code');
+    if (pickedEmoji) {
+      const newValue = values[field] ? `${values[field]}${pickedEmoji}` : pickedEmoji;
+      this.handleChange(field, newValue);
+    } else {
+      console.log('ERROR: Invalid emoji code');
+    }
   };
 
   handleEmojiPicker = () => {
