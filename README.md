@@ -120,7 +120,6 @@ Example:
 | Property | Type | Default | Description |
 | --- | --- | --- | --- |
 | default | `mixed` | | The default value for the field |
-| items | `array` | | The list for select items. |
 | key | `string` | `key` | The identifier in the values object |
 | name | `string` | `field` | The label of the field |
 
