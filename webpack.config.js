@@ -25,6 +25,7 @@ const client = {
       },
     ],
   },
+  devtool: 'eval-source-map',
 };
 
 module.exports = client;
