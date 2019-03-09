@@ -1,24 +1,23 @@
 import React from 'react';
 import _ from 'lodash';
-import TextField from 'material-ui/TextField';
-import FlatButton from 'material-ui/FlatButton';
-import Checkbox from 'material-ui/Checkbox';
+
 import Box, { VBox } from 'react-layout-components';
+import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
+import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import Button from '@material-ui/core/Button';
+import FormControlLabel from '@material-ui/core/FormControlLabel';
+import FormGroup from '@material-ui/core/FormGroup';
+import FormControl from '@material-ui/core/FormControl';
+import Checkbox from '@material-ui/core/Checkbox';
+import IconButton from '@material-ui/core/IconButton';
+import Smile from '@material-ui/icons/Mood';
 import ChipInput from 'material-ui-chip-input';
-import SelectField from 'material-ui/SelectField';
-const FileUpload = require('react-fileupload');
-
-import RaisedButton from 'material-ui/RaisedButton';
-import FineUploaderTraditional from 'fine-uploader-wrappers';
-import MenuItem from 'material-ui/MenuItem';
-import DateTimePicker from 'material-ui-datetimepicker';
-import DatePickerDialog from 'material-ui/DatePicker/DatePickerDialog';
-import TimePickerDialog from 'material-ui/TimePicker/TimePickerDialog';
-
-import IconButton from 'material-ui/IconButton';
-import Smile from 'material-ui/svg-icons/social/mood';
 import EmojiPicker from 'emoji-picker-react';
 import EmojiConvertor from 'emoji-js';
+
+import CustomTextField from './components/TextField';
+import CustomSelect from './components/SelectField';
+import ImageUpload from './components/ImageUpload';
 
 export default class Form extends React.Component {
   style = {
@@ -36,8 +35,6 @@ export default class Form extends React.Component {
   }
 
   DEFAULT_IMG = this.props.defaultImage || 'http://via.placeholder.com/50x50';
-  underlineFocusStyle = this.props.focusStyle || {};
-  floatingLabelFocusStyle = this.props.focusStyle || {};
 
   handleEmojiText = (input) => {
     if (_.isString(input)) {
@@ -113,33 +110,14 @@ export default class Form extends React.Component {
     return _.replace(name, /\./g, ' ');
   };
 
-  getItems = (items, parentKey) => {
-    const values = items.map((item) => item.value);
-    return items.map((item) => {
-      let key = item.key || item.value || 'key';
-      key = `${parentKey}-${key}`;
-      return (
-        <MenuItem
-          value={item.value}
-          key={key}
-          primaryText={item.title}
-          checked={values && values.indexOf(name) > -1}
-        />
-      );
-    });
-  };
-
   getField = (field) => {
     const key = field.key || field.name || 'key';
     const type = field.type || 'text';
     const defaultValue = field.default || null;
     const name = field.name || 'field';
     const inputKey = `form-${key}`;
-    const items = this.getItems(field.items || [], key);
     const errors = this.props.errors;
     const disabled = field.disabled || false;
-    const empty = field.empty || false;
-    const multiple = field.multiple || false;
     const emoji = field.emoji || false;
 
     let errorText = '';
@@ -149,37 +127,18 @@ export default class Form extends React.Component {
     }
     switch (type) {
       case 'text':
-        return (
-          <TextField
-            key={inputKey}
-            hintText={this.getName(name)}
-            floatingLabelText={this.getName(name)}
-            style={{ width: '100%' }}
-            underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-            value={this.getProperty(key, defaultValue, '')}
-            onChange={(event) => this.handleChange(key, event.target.value)}
-            errorText={errorText}
-            disabled={disabled}
-          />
-        );
       case 'password':
+      case 'number':
         return (
-          <TextField
-            key={inputKey}
-            hintText={this.getName(name)}
-            floatingLabelText={this.getName(name)}
-            type="password"
-            style={{ width: '100%' }}
-            underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelFocusStyle={this.floatingLabelFocusStyle}
+          <CustomTextField
+            field={field}
+            errors={this.props.errors}
             value={this.getProperty(key, defaultValue, '')}
             onChange={(event) => this.handleChange(key, event.target.value)}
-            errorText={errorText}
-            disabled={disabled}
           />
         );
-      case 'multiLineText':
+
+      case 'multiLineText': {
         return (
           <div>
             <div
@@ -188,311 +147,108 @@ export default class Form extends React.Component {
                 alignItems: 'flex-end',
               }}
             >
-              <TextField
-                key={inputKey}
-                hintText={this.getName(name)}
-                floatingLabelText={this.getName(name)}
-                style={{ width: '100%' }}
-                underlineFocusStyle={this.underlineFocusStyle}
-                floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-                inputStyle={{ marginTop: 3 }}
-                floatingLabelStyle={{ top: 40 }}
+              <CustomTextField
+                field={field}
+                errors={this.props.errors}
                 value={this.getProperty(key, defaultValue, '')}
                 onChange={(event) => this.handleChange(key, event.target.value)}
-                multiLine={true}
+                multiline
                 rows={field.rows || 1}
-                rowsMax={field.rowsMax || 2}
-                errorText={errorText}
-                disabled={disabled}
+                rowsMax={field.rowsMax || 3}
+                // inputStyle={{ marginTop: 3 }}
+                // floatingLabelStyle={{ top: 40 }}
               />
               {emoji ? (
                 <div>
-                  <IconButton onClick={() => this.handleEmojiPicker()}>
-                    <Smile color="grey" />
+                  <IconButton onClick={this.handleEmojiPicker}>
+                    <Smile />
                   </IconButton>
                 </div>
               ) : null}
             </div>
-            {this.state.emojiPickerOpen ? (
+            {emoji && this.state.emojiPickerOpen ? (
               <EmojiPicker
                 onEmojiClick={(emoji, emojiData) => this.getPickedEmoji(key, emojiData)}
               />
             ) : null}
           </div>
         );
-      case 'number':
-        return (
-          <TextField
-            type="number"
-            hintText={name}
-            style={this.style}
-            underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-            floatingLabelText={name}
-            value={this.getProperty(key, defaultValue, 0)}
-            onChange={(event) => this.handleChange(key, parseInt(event.target.value))}
-            errorText={errorText}
-            disabled={disabled}
-          />
-        );
-      case 'select':
-        return (
-          <SelectField
-            key={inputKey}
-            hintText={this.getName(name)}
-            floatingLabelText={this.getName(name)}
-            underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelFocusStyle={this.floatingLabelFocusStyle}
-            style={this.style}
-            value={this.getProperty(key, defaultValue, '')}
-            onChange={(event, index, value) => this.handleChange(key, value)}
-            maxHeight={200}
-            errorText={errorText}
-            disabled={disabled}
-            multiple={multiple}
-          >
-            {empty && <MenuItem value={null} primaryText="" />}
-            {items}
-          </SelectField>
-        );
-      case 'datetime':
-        return (
-          <DateTimePicker
-            DatePicker={DatePickerDialog}
-            TimePicker={TimePickerDialog}
-            format="YYYY-MM-DD HH:mm"
-            timeFormat="24hr"
-            returnMomentDate={true}
-            onChange={(value) => {
-              this.handleChange(key, value.format('YYYY-MM-DD HH:mm:ss'));
-            }}
-            key={inputKey}
-            hintText={this.getName(name)}
-            floatingLabelText={this.getName(name)}
-            style={this.style}
-            value={this.getProperty(key, defaultValue, '')}
-            errorText={errorText}
-            disabled={disabled}
-          />
-        );
+      }
 
-      case 'checkbox':
+      case 'select': {
         return (
-          <Checkbox
-            label={this.getName(name)}
-            checked={this.getProperty(key, defaultValue, false)}
-            onCheck={(event, isChecked) => this.handleChange(key, isChecked)}
-            disabled={disabled}
-            style={{ marginTop: '15px' }}
+          <CustomSelect
+            field={field}
+            errors={this.props.errors}
+            selectedValues={this.getProperty(key, defaultValue, field.multiple ? [] : '')}
+            onChange={(event) => this.handleChange(key, event.target.value)}
           />
         );
+      }
+
+      case 'checkbox': {
+        return (
+          <FormControl component="fieldset">
+            <FormGroup row>
+              <FormControlLabel
+                control={
+                  <Checkbox
+                    checked={this.getProperty(key, defaultValue, false)}
+                    value={`${this.getProperty(key, defaultValue, false)}`}
+                    onClick={(event) => {
+                      this.handleChange(key, event.target.checked);
+                    }}
+                    disabled={disabled}
+                  />
+                }
+                label={this.getName(name)}
+              />
+            </FormGroup>
+          </FormControl>
+        );
+      }
+
       case 'chip': {
         const value = this.getProperty(key, defaultValue, []);
         return (
-          <ChipInput
-            key={inputKey}
-            value={value}
-            hintText={this.getName(name)}
-            floatingLabelText={this.getName(name)}
-            underlineFocusStyle={this.underlineFocusStyle}
-            floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
-            fullWidth
-            onRequestAdd={(chip) => this.handleAddChip(key, value, chip)}
-            onRequestDelete={(chip) => this.handleDeleteChip(key, value, chip)}
-            errorText={errorText}
-          />
+          <V0MuiThemeProvider muiTheme={getMuiTheme({ primary1Color: 'red' })}>
+            <ChipInput
+              key={inputKey}
+              value={value}
+              hintText={this.getName(name)}
+              floatingLabelText={this.getName(name)}
+              underlineFocusStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
+              floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
+              fullWidth
+              onRequestAdd={(chip) => this.handleChange(key, _.concat(value, chip))}
+              onRequestDelete={(chip) => this.handleChange(key, _.without(value, chip))}
+              errorText={errorText}
+            />
+          </V0MuiThemeProvider>
         );
       }
-      case 'image': {
-        const defaultImg = defaultValue || this.DEFAULT_IMG;
-        const options = {
-          baseUrl: field.resource,
-          fileFieldName: 'files',
-          uploadSuccess: field.uploadSuccess,
-          chooseAndUpload: true,
-        };
-        const imageStyle = {
-          fontSize: 16,
-          lineHeight: '24px',
-          width: '100%',
-          display: 'inline-block',
-          position: 'relative',
-          backgroundColor: 'transparent',
-          fontFamily: 'Roboto, sans-serif',
-          transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          cursor: 'text',
-          marginTop: 14,
-          color: 'rgba(0, 0, 0, 0.3)',
-        };
-        return (
-          <div>
-            <label style={imageStyle}>{this.getName(name)}</label>
-            <div style={{ cursor: 'pointer' }}>
-              <FileUpload options={options}>
-                <img
-                  ref="chooseAndUpload"
-                  src={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
-                  onError={(e) => {
-                    e.target.src = this.DEFAULT_IMG;
-                  }}
-                  style={{ width: 50, height: 50 }}
-                />
-              </FileUpload>
-            </div>
-          </div>
-        );
-      }
+
+      case 'image':
       case 'image2': {
         const defaultImg = defaultValue || this.DEFAULT_IMG;
-        const imageLabelStyle = {
-          fontSize: 16,
-          lineHeight: '24px',
-          width: '100%',
-          display: 'inline-block',
-          position: 'relative',
-          backgroundColor: 'transparent',
-          fontFamily: 'Roboto, sans-serif',
-          transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          cursor: 'text',
-          marginTop: 14,
-          color: 'rgba(0, 0, 0, 0.3)',
-        };
-
-        const imageStyle = {
-          display: 'block',
-          marginBottom: 10,
-          width: 50,
-          height: 50,
-        };
-        if (_.get(field, 'position') === 'flex') {
-          imageStyle.width = '100%';
-          imageStyle.height = 150;
-          imageStyle.objectFit = 'cover';
-        }
-
-        const uploader = new FineUploaderTraditional({
-          options: {
-            request: {
-              endpoint: _.get(field, 'resource'),
-              multiple: false,
-              inputName: 'file',
-            },
-            callbacks: {
-              onComplete: (id, name, response) => {
-                if (response.success) {
-                  this.handleChange(key, _.get(field, 'prefix') + name);
-                  return _.get(field, 'onSuccess', () => {})(name, true);
-                }
-                return _.get(field, 'onError', () => {})(name, response);
-              },
-            },
-          },
-        });
-
         return (
-          <div>
-            <label style={imageLabelStyle}>{this.getName(name)}</label>
-            <div style={{ cursor: 'pointer', width: '100%' }}>
-              <img
-                src={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
-                onError={(e) => {
-                  e.target.src = this.DEFAULT_IMG;
-                }}
-                style={imageStyle}
-              />
-              <RaisedButton containerElement="label" label="upload" primary>
-                <input
-                  type="file"
-                  style={{ display: 'none' }}
-                  accept="image/*"
-                  onChange={(onChangeEvent) => {
-                    uploader.methods.addFiles(onChangeEvent.target);
-                  }}
-                />
-              </RaisedButton>
-            </div>
-          </div>
-        );
-      }
-      case 'video': {
-        const defaultImg = defaultValue || this.DEFAULT_IMG;
-        const videoLabelStyle = {
-          fontSize: 16,
-          lineHeight: '24px',
-          width: '100%',
-          display: 'inline-block',
-          position: 'relative',
-          backgroundColor: 'transparent',
-          fontFamily: 'Roboto, sans-serif',
-          transition: 'height 200ms cubic-bezier(0.23, 1, 0.32, 1) 0ms',
-          cursor: 'text',
-          marginTop: 14,
-          color: 'rgba(0, 0, 0, 0.3)',
-        };
-
-        const uploader = new FineUploaderTraditional({
-          options: {
-            request: {
-              endpoint: _.get(field, 'resource'),
-              multiple: false,
-              inputName: 'file',
-            },
-            callbacks: {
-              onComplete: (id, name, response) => {
-                if (response.success) {
-                  this.handleChange(key, _.get(field, 'prefix') + name);
-                  return _.get(field, 'onSuccess', () => {})(name, true);
-                }
-                return _.get(field, 'onError', () => {})(name, response);
-              },
-            },
-          },
-        });
-
-        return (
-          <div>
-            <label style={videoLabelStyle}>{this.getName(name)}</label>
-            <div style={{ cursor: 'pointer', width: '100%' }}>
-              <div style={{ marginTop: 10, marginBottom: 10 }}>
-                Uploaded video:
-                <a href={this.getProperty(key, defaultValue, '')} style={{ paddingLeft: 10 }}>
-                  {this.getProperty(key, defaultValue, '')}
-                </a>
-              </div>
-              <RaisedButton containerElement="label" label="upload" primary>
-                <input
-                  type="file"
-                  style={{ display: 'none' }}
-                  accept="video/*"
-                  onChange={(onChangeEvent) => {
-                    uploader.methods.addFiles(onChangeEvent.target);
-                  }}
-                />
-              </RaisedButton>
-            </div>
-          </div>
+          <ImageUpload
+            field={field}
+            srcValue={this.getProperty(key, defaultImg, '') + '?' + new Date().getTime()}
+            defaultImg={this.DEFAULT_IMG}
+            handleChange={this.handleChange}
+          />
         );
       }
     }
   };
 
-  handleAddChip = (key, value, chip) => {
-    this.handleChange(key, _.concat(value, chip));
-  };
-
-  handleDeleteChip = (key, value, chip) => {
-    this.handleChange(key, _.without(value, chip));
-  };
-
-  getFields = () => {
-    return this.props.fields.map((field, index) => {
-      return (
-        <div key={`form-field-container-${index}`} style={this.props.inputContainerStyle}>
-          {this.getField(field)}
-        </div>
-      );
-    });
-  };
+  getFields = () =>
+    this.props.fields.map((field, index) => (
+      <div key={`form-field-container-${index}`} style={this.props.inputContainerStyle}>
+        {this.getField(field)}
+      </div>
+    ));
 
   render() {
     let FieldContainer = VBox;
@@ -510,14 +266,13 @@ export default class Form extends React.Component {
         </FieldContainer>
         <Box style={{ justifyContent: 'center', ...this.props.actionContainerStyle }}>
           {this.props.saveForm && (
-            <FlatButton
-              secondary={true}
-              label="Save"
+            <Button
+              variant="contained"
               onClick={() => this.props.saveForm(this.state.values)}
-            />
-          )}
-          {this.props.deleteItem && (
-            <FlatButton label="Delete" secondary={true} onClick={this.props.deleteItem} />
+              style={{ display: 'block', margin: '0 auto', width: '30%' }}
+            >
+              {'Save'}
+            </Button>
           )}
         </Box>
       </VBox>
