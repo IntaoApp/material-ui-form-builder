@@ -27,7 +27,6 @@
     "prettier": "1.15.3",
     "react": "16.8.4",
     "react-dom": "16.8.4",
-    "react-fileupload": "2.4.0",
     "react-layout-components": "3.0.6"
   },
   "devDependencies": {
