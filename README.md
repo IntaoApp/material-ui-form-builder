@@ -17,17 +17,20 @@ npm i --save material-ui-form-builder
 ```javascript
 import React from 'react';
 import ReactDOM from 'react-dom';
-import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
+import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 
 import Form from 'material-ui-form-builder';
 
 const fields = [{ name: 'name', type: 'text' }, { name: 'limit', type: 'number' }];
-const muiTheme = getMuiTheme({});
+const theme = createMuiTheme({
+  palette: {
+    primary: { main: '#8BC3D1' },
+  },
+});
 
 ReactDOM.render(
   <div>
-    <MuiThemeProvider muiTheme={muiTheme}>
+    <MuiThemeProvider theme={theme}>
       <Form
         fieldContainerStyle={{ backgroundColor: '#fefefe', padding: 10 }}
         onChange={(values) => console.log(values)}
@@ -95,18 +98,6 @@ Example:
 | key      | `string` | `key`   | The identifier in the values object                 |
 | multiple | `bool`   | `false` | Will support multiple selections, if value is trues |
 | name     | `string` | `field` | The label of the field                              |
-
-### datetime
-
-Example:
-`{name: 'name', type: 'datetime'}`
-
-| Property | Type     | Default | Description                         |
-| -------- | -------- | ------- | ----------------------------------- |
-| default  | `date`   |         | The default value for the field     |
-| disabled | `bool`   |         | Set true to disable the field       |
-| key      | `string` | `key`   | The identifier in the values object |
-| name     | `string` | `field` | The label of the field              |
 
 ### checkbox
 
