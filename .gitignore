@@ -2,3 +2,5 @@ node_modules
 /index.js
 /app.js
 /bundle.js
+components
+/formData.js
