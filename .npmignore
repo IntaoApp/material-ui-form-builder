@@ -1,2 +1,4 @@
-*
-!index.js
+node_modules
+/app.js
+/bundle.js
+/formData.js
