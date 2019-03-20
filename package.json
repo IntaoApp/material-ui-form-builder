@@ -16,18 +16,18 @@
     "@material-ui/core": "3.9.2",
     "@material-ui/icons": "3.0.2",
     "@material-ui/styles": "3.0.0-alpha.10",
+    "classnames": "2.2.6",
     "emoji-js": "3.4.1",
     "emoji-picker-react": "2.1.1",
     "fine-uploader": "5.16.2",
     "fine-uploader-wrappers": "1.0.1",
     "lodash": "4.16.6",
-    "material-ui": "0.20.1",
-    "material-ui-chip-input": "0.18.2",
     "material-ui-datetimepicker": "1.0.5",
     "prettier": "1.15.3",
     "react": "16.8.4",
     "react-dom": "16.8.4",
-    "react-layout-components": "3.0.6"
+    "react-layout-components": "3.0.6",
+    "react-select": "2.4.1"
   },
   "devDependencies": {
     "@babel/cli": "7.2.3",

@@ -8,9 +8,12 @@ export const values = {
     'aliqua. Ut enim ad minim veniam, quis nostrud exercitation\n' +
     'ullamco laboris nisi ut aliquip ex ea commodo consequat.',
   multilineTextFieldWithEmoji: '😅😌🤠😤😘',
-  selectField: 1,
   isActivated: true,
   chipField: ['chip1', 'chip2', 'chip3'],
+  singleselect: 1,
+  multiselect: [1, 2],
+  asyncSelectSingle: { value: 1, label: 'first item' },
+  asyncSelectMultiple: [{ value: 1, label: 'first item' }, { value: 2, label: 'second item' }],
   imageUpload: 'https://picsum.photos/1200/150',
 };
 
@@ -32,29 +35,83 @@ export const fields = [
     emoji: true,
   },
 
+  { name: 'Activated', type: 'checkbox', key: 'isActivated' },
+
   {
-    name: 'select',
+    name: 'chips',
+    type: 'chip',
+    key: 'chipField',
+  },
+
+  {
+    name: 'single select',
     type: 'select',
-    key: 'selectField',
-    items: [{ value: 1, title: 'first item' }, { value: 2, title: 'second item' }],
+    items: [
+      { value: 1, title: 'first item' },
+      { value: 2, title: 'second item' },
+      { value: 3, title: '3rd item' },
+      { value: 4, title: '4th item' },
+    ],
+    key: 'singleselect',
     multiple: false,
     empty: true,
   },
 
   {
-    name: 'multiple select',
+    name: 'multiselect',
     type: 'select',
-    key: 'selectFieldMultiple',
-    items: [{ value: 1, title: 'first item' }, { value: 2, title: 'second item' }],
+    items: [
+      { value: 1, title: 'first item' },
+      { value: 2, title: 'second item' },
+      { value: 3, title: '3rd item' },
+      { value: 4, title: '4th item' },
+    ],
+    key: 'multiselect',
     multiple: true,
   },
 
-  { name: 'Activated', type: 'checkbox', key: 'isActivated' },
+  {
+    name: 'asyncSelect multiple',
+    type: 'asyncSelect',
+    items: [{ value: 1, label: 'first item' }, { value: 2, label: 'second item' }],
+    promiseOptions: (inputValue) =>
+      new Promise((resolve) => {
+        console.log('promiseOptions', inputValue);
+        setTimeout(() => {
+          resolve(
+            [
+              { value: 1, label: 'first item' },
+              { value: 2, label: 'second item' },
+              { value: 3, label: '3rd item' },
+              { value: 4, label: '4th item' },
+            ].filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
+          );
+        }, 1000);
+      }),
+    key: 'asyncSelectMultiple',
+    multiple: true,
+  },
 
   {
-    name: 'labels',
-    type: 'chip',
-    key: 'chipField',
+    name: 'asyncSelect single',
+    type: 'asyncSelect',
+    items: [{ value: 1, label: 'first item' }, { value: 2, label: 'second item' }],
+    promiseOptions: (inputValue) =>
+      new Promise((resolve) => {
+        console.log('promiseOptions', inputValue);
+        setTimeout(() => {
+          resolve(
+            [
+              { value: 1, label: 'first item' },
+              { value: 2, label: 'second item' },
+              { value: 3, label: '3rd item' },
+              { value: 4, label: '4th item' },
+            ].filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
+          );
+        }, 1000);
+      }),
+    key: 'asyncSelectSingle',
+    empty: true,
   },
 
   {

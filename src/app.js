@@ -10,6 +10,7 @@ const theme = createMuiTheme({
   palette: {
     primary: { main: '#8BC3D1' },
   },
+  spacing: '8px',
 });
 
 const saveForm = (values) => {
