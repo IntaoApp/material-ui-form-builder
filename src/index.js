@@ -2,8 +2,6 @@ import React from 'react';
 import _ from 'lodash';
 
 import Box, { VBox } from 'react-layout-components';
-import V0MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import Button from '@material-ui/core/Button';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormGroup from '@material-ui/core/FormGroup';
@@ -11,13 +9,15 @@ import FormControl from '@material-ui/core/FormControl';
 import Checkbox from '@material-ui/core/Checkbox';
 import IconButton from '@material-ui/core/IconButton';
 import Smile from '@material-ui/icons/Mood';
-import ChipInput from 'material-ui-chip-input';
 import EmojiPicker from 'emoji-picker-react';
 import EmojiConvertor from 'emoji-js';
 
 import CustomTextField from './components/TextField';
-import CustomSelect from './components/SelectField';
 import ImageUpload from './components/ImageUpload';
+
+import Select from './components/Select';
+import AsyncSelect from './components/AsyncSelect';
+import ChipInput from './components/ChipInput';
 
 export default class Form extends React.Component {
   style = {
@@ -111,20 +111,15 @@ export default class Form extends React.Component {
   };
 
   getField = (field) => {
+    const errors = this.props.errors;
+
     const key = field.key || field.name || 'key';
     const type = field.type || 'text';
     const defaultValue = field.default || null;
     const name = field.name || 'field';
-    const inputKey = `form-${key}`;
-    const errors = this.props.errors;
     const disabled = field.disabled || false;
     const emoji = field.emoji || false;
 
-    let errorText = '';
-
-    if (_.get(errors, key)) {
-      errorText = errors[key];
-    }
     switch (type) {
       case 'text':
       case 'password':
@@ -155,8 +150,6 @@ export default class Form extends React.Component {
                 multiline
                 rows={field.rows || 1}
                 rowsMax={field.rowsMax || 3}
-                // inputStyle={{ marginTop: 3 }}
-                // floatingLabelStyle={{ top: 40 }}
               />
               {emoji ? (
                 <div>
@@ -175,16 +168,25 @@ export default class Form extends React.Component {
         );
       }
 
-      case 'select': {
+      case 'select':
         return (
-          <CustomSelect
+          <Select
             field={field}
             errors={this.props.errors}
-            selectedValues={this.getProperty(key, defaultValue, field.multiple ? [] : '')}
-            onChange={(event) => this.handleChange(key, event.target.value)}
+            selectedValue={this.getProperty(key, defaultValue, field.multiple ? [] : '')}
+            onChange={(value) => this.handleChange(key, value)}
           />
         );
-      }
+
+      case 'asyncSelect':
+        return (
+          <AsyncSelect
+            field={field}
+            errors={this.props.errors}
+            onChange={(value) => this.handleChange(key, value)}
+            selectedValue={this.getProperty(key, defaultValue, field.multiple ? [] : '')}
+          />
+        );
 
       case 'checkbox': {
         return (
@@ -211,20 +213,12 @@ export default class Form extends React.Component {
       case 'chip': {
         const value = this.getProperty(key, defaultValue, []);
         return (
-          <V0MuiThemeProvider muiTheme={getMuiTheme({ primary1Color: 'red' })}>
-            <ChipInput
-              key={inputKey}
-              value={value}
-              hintText={this.getName(name)}
-              floatingLabelText={this.getName(name)}
-              underlineFocusStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
-              floatingLabelStyle={{ color: 'rgba(0, 0, 0, 0.3)' }}
-              fullWidth
-              onRequestAdd={(chip) => this.handleChange(key, _.concat(value, chip))}
-              onRequestDelete={(chip) => this.handleChange(key, _.without(value, chip))}
-              errorText={errorText}
-            />
-          </V0MuiThemeProvider>
+          <ChipInput
+            field={field}
+            value={value}
+            onChange={(value) => this.handleChange(key, value)}
+            errors={errors}
+          />
         );
       }
 
@@ -245,7 +239,10 @@ export default class Form extends React.Component {
 
   getFields = () =>
     this.props.fields.map((field, index) => (
-      <div key={`form-field-container-${index}`} style={this.props.inputContainerStyle}>
+      <div
+        key={`form-field-container-${index}`}
+        style={{ margin: '10px 0', ...this.props.inputContainerStyle }}
+      >
         {this.getField(field)}
       </div>
     ));
@@ -258,7 +255,11 @@ export default class Form extends React.Component {
     return (
       <VBox style={this.style}>
         <FieldContainer
-          style={{ overflow: 'auto', ...this.props.fieldContainerStyle }}
+          style={{
+            backgroundColor: '#fefefe',
+            padding: 10,
+            ...this.props.fieldContainerStyle,
+          }}
           flex={1}
           wrap={this.props.wrap}
         >
