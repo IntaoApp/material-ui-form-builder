@@ -3,7 +3,7 @@ import React from 'react';
 import { shape, string, func, number, oneOfType, arrayOf } from 'prop-types';
 import classNames from 'classnames';
 import Select from 'react-select';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -12,7 +12,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const useStyles = makeStyles((theme) => ({
+const style = (theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -59,7 +59,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     // height: theme.spacing.unit * 2,
   },
-}));
+});
 
 function NoOptionsMessage(props) {
   return (
@@ -184,11 +184,9 @@ function IntegrationReactSelect({
   errors,
   onChange,
   onInputChange,
+  classes,
   ...others
 }) {
-  const classes = useStyles();
-  // const theme = useTheme();
-
   const name = field.name || 'field';
 
   const key = field.key || field.name || 'key';
@@ -261,4 +259,4 @@ IntegrationReactSelect.propTypes = {
   errors: shape({}),
 };
 
-export default IntegrationReactSelect;
+export default withStyles(style)(IntegrationReactSelect);
