@@ -5,7 +5,7 @@ import Button from '@material-ui/core/Button';
 import FineUploaderTraditional from 'fine-uploader-wrappers';
 
 const imageLabelStyle = {
-  fontSize: 16,
+  fontSize: 14,
   lineHeight: '24px',
   width: '100%',
   display: 'inline-block',

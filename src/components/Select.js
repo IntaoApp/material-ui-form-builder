@@ -42,12 +42,12 @@ const style = (theme) => ({
     // padding: `${theme.spacing.unit}px ${theme.spacing.unit * 2}px`,
   },
   singleValue: {
-    fontSize: 16,
+    fontSize: 14,
   },
   placeholder: {
     position: 'absolute',
     left: 2,
-    fontSize: 16,
+    fontSize: 14,
   },
   paper: {
     position: 'absolute',

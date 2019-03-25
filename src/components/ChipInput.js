@@ -39,7 +39,7 @@ const useStyles = makeStyles((theme) => ({
   placeholder: {
     position: 'absolute',
     left: 2,
-    fontSize: 16,
+    fontSize: 14,
   },
 }));
 
