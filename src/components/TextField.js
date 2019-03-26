@@ -30,7 +30,7 @@ const CustomTextField = ({ field, value, errors, onChange, multiline, ...others 
       multiline={multiline}
       fullWidth
       {...others}
-      InputProps={{ style: { height: '36px' } }}
+      InputProps={{ style: multiline ? { minHeight: '36px' } : { height: '36px' } }}
     />
   );
 };
