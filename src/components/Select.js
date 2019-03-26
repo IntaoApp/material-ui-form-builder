@@ -55,6 +55,8 @@ const style = (theme) => ({
     // marginTop: theme.spacing.unit,
     left: 0,
     right: 0,
+    maxHeight: '200px',
+    overflowY: 'scroll',
   },
   divider: {
     // height: theme.spacing.unit * 2,

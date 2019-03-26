@@ -17,6 +17,27 @@ export const values = {
   imageUpload: 'https://picsum.photos/1200/150',
 };
 
+const selectItems = [
+  { value: 1, title: 'first item' },
+  { value: 2, title: 'second item' },
+  { value: 3, title: '3rd item' },
+  { value: 4, title: '4th item' },
+  { value: 5, title: 'item5' },
+  { value: 6, title: 'item6' },
+  { value: 7, title: 'item7' },
+  { value: 8, title: 'item8' },
+  { value: 9, title: 'item9' },
+  { value: 10, title: 'item10' },
+  { value: 11, title: 'item11' },
+  { value: 12, title: 'item12' },
+  { value: 13, title: 'item13' },
+  { value: 14, title: 'item14' },
+  { value: 15, title: 'item15' },
+  { value: 16, title: 'item16' },
+  { value: 17, title: 'item17' },
+  { value: 18, title: 'item18' },
+];
+
 export const fields = [
   { name: 'simple text field', type: 'text', key: 'simpleTextField' },
 
@@ -46,12 +67,7 @@ export const fields = [
   {
     name: 'single select',
     type: 'select',
-    items: [
-      { value: 1, title: 'first item' },
-      { value: 2, title: 'second item' },
-      { value: 3, title: '3rd item' },
-      { value: 4, title: '4th item' },
-    ],
+    items: [...selectItems],
     key: 'singleselect',
     multiple: false,
     empty: true,
@@ -60,12 +76,7 @@ export const fields = [
   {
     name: 'multiselect',
     type: 'select',
-    items: [
-      { value: 1, title: 'first item' },
-      { value: 2, title: 'second item' },
-      { value: 3, title: '3rd item' },
-      { value: 4, title: '4th item' },
-    ],
+    items: [...selectItems],
     key: 'multiselect',
     multiple: true,
   },
@@ -84,6 +95,8 @@ export const fields = [
               { value: 2, label: 'second item' },
               { value: 3, label: '3rd item' },
               { value: 4, label: '4th item' },
+              { value: 5, label: 'item5' },
+              { value: 6, label: 'item6' },
             ].filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
           );
         }, 1000);
@@ -106,6 +119,8 @@ export const fields = [
               { value: 2, label: 'second item' },
               { value: 3, label: '3rd item' },
               { value: 4, label: '4th item' },
+              { value: 5, label: 'item5' },
+              { value: 6, label: 'item6' },
             ].filter((i) => i.label.toLowerCase().includes(inputValue.toLowerCase()))
           );
         }, 1000);
