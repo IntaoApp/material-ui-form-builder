@@ -26,6 +26,7 @@
     "react": "16.8.4",
     "react-dom": "16.8.4",
     "react-layout-components": "3.0.6",
+    "react-relative-portal": "1.7.2",
     "react-select": "2.4.1"
   },
   "devDependencies": {

@@ -258,6 +258,7 @@ export default class Form extends React.Component {
           style={{
             backgroundColor: '#fefefe',
             padding: 10,
+            overflowY: 'scroll',
             ...this.props.fieldContainerStyle,
           }}
           flex={1}

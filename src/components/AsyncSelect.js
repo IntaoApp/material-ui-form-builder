@@ -1,5 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
+import RelativePortal from 'react-relative-portal';
 import { shape, string, func, number, oneOfType, arrayOf } from 'prop-types';
 import classNames from 'classnames';
 import AsyncSelect from 'react-select/lib/Async';
@@ -153,9 +154,16 @@ function MultiValue(props) {
 
 function Menu(props) {
   return (
-    <Paper square className={props.selectProps.classes.paper} {...props.innerProps}>
-      {props.children}
-    </Paper>
+    <RelativePortal component="div" left={0} top={0}>
+      <Paper
+        square
+        className={props.selectProps.classes.paper}
+        {...props.innerProps}
+        style={{ width: '400px' }}
+      >
+        {props.children}
+      </Paper>
+    </RelativePortal>
   );
 }
 
