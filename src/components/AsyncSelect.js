@@ -4,7 +4,7 @@ import RelativePortal from 'react-relative-portal';
 import { shape, string, func, number, oneOfType, arrayOf } from 'prop-types';
 import classNames from 'classnames';
 import AsyncSelect from 'react-select/lib/Async';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Paper from '@material-ui/core/Paper';
@@ -13,7 +13,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -62,7 +62,7 @@ const useStyles = makeStyles((theme) => ({
   divider: {
     // height: theme.spacing.unit * 2,
   },
-}));
+});
 
 function NoOptionsMessage(props) {
   return (
@@ -180,10 +180,7 @@ const components = {
 
 const getName = (name) => _.replace(name, /\./g, ' ');
 
-function IntegrationReactSelect({ field, errors, selectedValue, onChange, ...others }) {
-  const classes = useStyles();
-  // const theme = useTheme();
-
+function IntegrationReactSelect({ field, errors, selectedValue, onChange, classes, ...others }) {
   const name = field.name || 'field';
   const promiseOptions = field.promiseOptions || null;
 
@@ -261,4 +258,4 @@ IntegrationReactSelect.propTypes = {
   errors: shape({}),
 };
 
-export default IntegrationReactSelect;
+export default withStyles(styles)(IntegrationReactSelect);

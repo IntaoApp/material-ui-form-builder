@@ -3,14 +3,14 @@ import React from 'react';
 import { shape, string, func, number, arrayOf, oneOfType } from 'prop-types';
 import classNames from 'classnames';
 import CreatableSelect from 'react-select/lib/Creatable';
-import { makeStyles, useTheme } from '@material-ui/styles';
+import { withStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Chip from '@material-ui/core/Chip';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
 
-const useStyles = makeStyles((theme) => ({
+const styles = (theme) => ({
   root: {
     flexGrow: 1,
   },
@@ -41,7 +41,7 @@ const useStyles = makeStyles((theme) => ({
     left: 2,
     fontSize: 14,
   },
-}));
+});
 
 function inputComponent({ inputRef, ...props }) {
   return <div ref={inputRef} {...props} />;
@@ -105,10 +105,7 @@ const components = {
   DropdownIndicator: null,
 };
 
-const ChipInput = ({ field, value, onChange, errors }) => {
-  const classes = useStyles();
-  // const theme = useTheme();
-
+const ChipInput = ({ field, value, onChange, errors, classes }) => {
   const [inputValue, setInputValue] = React.useState('');
 
   const key = field.key || field.name || 'key';
@@ -178,4 +175,4 @@ ChipInput.propTypes = {
   errors: shape({}),
 };
 
-export default ChipInput;
+export default withStyles(styles)(ChipInput);
