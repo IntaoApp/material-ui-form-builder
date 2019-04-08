@@ -90,14 +90,17 @@ Example:
 Example:
 `{name: 'name', type: 'select', items: [{value: 1, title: 'item'}]}`
 
-| Property | Type     | Default | Description                                         |
-| -------- | -------- | ------- | --------------------------------------------------- |
-| default  | `mixed`  |         | The default value for the field                     |
-| disabled | `bool`   |         | Set true to disable the field                       |
-| items    | `array`  |         | The list for select items.                          |
-| key      | `string` | `key`   | The identifier in the values object                 |
-| multiple | `bool`   | `false` | Will support multiple selections, if value is trues |
-| name     | `string` | `field` | The label of the field                              |
+| Property    | Type     | Default | Description                                                                      |
+| ----------- | -------- | ------- | -------------------------------------------------------------------------------- |
+| default     | `mixed`  |         | The default value for the field                                                  |
+| disabled    | `bool`   |         | Set true to disable the field                                                    |
+| items       | `array`  |         | The list for select items.                                                       |
+| key         | `string` | `key`   | The identifier in the values object                                              |
+| multiple    | `bool`   | `false` | Will support multiple selections, if value is trues                              |
+| name        | `string` | `field` | The label of the field                                                           |
+| dialogActive | `bool`   | `false` | If it is true, alert dialog will pop up every time when the value is changing |
+| dialogContent| `string` |         | The content of the alert dialog                                                   |
+| dialogTitle  | `string` |         | The title of the alert dialog                                                     |  
 
 ### checkbox
 
