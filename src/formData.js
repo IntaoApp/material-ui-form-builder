@@ -71,6 +71,9 @@ export const fields = [
     key: 'singleselect',
     multiple: false,
     empty: true,
+    dialogActive: true,
+    dialogContent: 'You can add alert dialog to the Single select. When the value is changing the modal pops up.',
+    dialogTitle: 'Modal Title',
   },
 
   {

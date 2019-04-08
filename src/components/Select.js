@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import RelativePortal from 'react-relative-portal';
 import { shape, string, func, number, oneOfType, arrayOf } from 'prop-types';
 import classNames from 'classnames';
@@ -12,6 +12,7 @@ import Chip from '@material-ui/core/Chip';
 import MenuItem from '@material-ui/core/MenuItem';
 import CancelIcon from '@material-ui/icons/Cancel';
 import { emphasize } from '@material-ui/core/styles/colorManipulator';
+import AlertDialog from './AlertDialog';
 
 const style = (theme) => ({
   root: {
@@ -195,8 +196,47 @@ function IntegrationReactSelect({
   onChange,
   onInputChange,
   classes,
+  dialogActive,
+  dialogContent,
+  dialogTitle,
   ...others
 }) {
+  const [prevSelected, setPrevSelected] = useState(selectedValue);
+  const [localValue, setLocalValue] = useState(selectedValue);
+  const [valueState, setValue] = useState(selectedValue);
+  const [answerState, setAnswerState] = useState('');
+  const [handleModalOpen, setHandleModalOpen] = useState(false);
+
+  useEffect(() => {
+    switch (answerState) {
+      case 'cancel':
+        setValue(prevSelected);
+        setHandleModalOpen(false);
+        setAnswerState('');
+        break;
+      case 'ok':
+        setPrevSelected(localValue);
+        setValue(localValue);
+        setHandleModalOpen(false);
+        setAnswerState('');
+        break;
+      default:
+        break;
+    }
+  }, [answerState]);
+
+  const ConditionalModalHandler = (value, isActive) => {
+    if ( prevSelected !== value && isActive) {
+      setHandleModalOpen(true);
+      setLocalValue(value);
+    }
+    setValue(value);
+  };
+
+  const handleUserChoice = (userChoice) => {
+    setAnswerState(userChoice);
+  };
+
   const name = field.name || 'field';
 
   const key = field.key || field.name || 'key';
@@ -218,6 +258,12 @@ function IntegrationReactSelect({
 
   return (
     <div className={classes.root}>
+      <AlertDialog 
+        userChoice={(a) => handleUserChoice(a)} 
+        handleOpen={handleModalOpen} 
+        content={dialogContent} 
+        title={dialogTitle}
+      />
       <Select
         classes={classes}
         styles={selectStyles}
@@ -229,11 +275,13 @@ function IntegrationReactSelect({
         }}
         options={options}
         components={components}
-        value={formatSelectedValue(selectedValue, options)}
+        value={formatSelectedValue(valueState, options)}
         onChange={(value) => {
           if (field.multiple) {
+            ConditionalModalHandler(value.map((item) => item.value), false);
             onChange(value.map((item) => item.value));
           } else {
+            ConditionalModalHandler(value.value, dialogActive);
             onChange(value.value);
           }
         }}
