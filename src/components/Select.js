@@ -211,18 +211,16 @@ function IntegrationReactSelect({
     switch (answerState) {
       case 'cancel':
         setValue(prevSelected);
-        setHandleModalOpen(false);
-        setAnswerState('');
         break;
       case 'ok':
         setPrevSelected(localValue);
         setValue(localValue);
-        setHandleModalOpen(false);
-        setAnswerState('');
         break;
       default:
         break;
-    }
+    };
+    setHandleModalOpen(false);
+    setAnswerState('');
   }, [answerState]);
 
   const ConditionalModalHandler = (value, isActive) => {
@@ -231,10 +229,6 @@ function IntegrationReactSelect({
       setLocalValue(value);
     }
     setValue(value);
-  };
-
-  const handleUserChoice = (userChoice) => {
-    setAnswerState(userChoice);
   };
 
   const name = field.name || 'field';
@@ -259,7 +253,7 @@ function IntegrationReactSelect({
   return (
     <div className={classes.root}>
       <AlertDialog 
-        userChoice={(a) => handleUserChoice(a)} 
+        userChoice={setAnswerState} 
         handleOpen={handleModalOpen} 
         content={dialogContent} 
         title={dialogTitle}
