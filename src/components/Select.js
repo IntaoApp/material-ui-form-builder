@@ -194,7 +194,6 @@ function IntegrationReactSelect({
   selectedValue,
   errors,
   onChange,
-  onInputChange,
   classes,
   dialogActive,
   dialogContent,
@@ -207,24 +206,27 @@ function IntegrationReactSelect({
   const [answerState, setAnswerState] = useState('');
   const [handleModalOpen, setHandleModalOpen] = useState(false);
 
-  useEffect(() => {
-    switch (answerState) {
-      case 'cancel':
-        setValue(prevSelected);
-        break;
-      case 'ok':
-        setPrevSelected(localValue);
-        setValue(localValue);
-        break;
-      default:
-        break;
-    };
-    setHandleModalOpen(false);
-    setAnswerState('');
-  }, [answerState]);
+  useEffect(
+    () => {
+      switch (answerState) {
+        case 'cancel':
+          setValue(prevSelected);
+          break;
+        case 'ok':
+          setPrevSelected(localValue);
+          setValue(localValue);
+          break;
+        default:
+          break;
+      }
+      setHandleModalOpen(false);
+      setAnswerState('');
+    },
+    [answerState]
+  );
 
   const ConditionalModalHandler = (value, isActive) => {
-    if ( prevSelected !== value && isActive) {
+    if (prevSelected !== value && isActive) {
       setHandleModalOpen(true);
       setLocalValue(value);
     }
@@ -252,10 +254,10 @@ function IntegrationReactSelect({
 
   return (
     <div className={classes.root}>
-      <AlertDialog 
-        userChoice={setAnswerState} 
-        handleOpen={handleModalOpen} 
-        content={dialogContent} 
+      <AlertDialog
+        userChoice={setAnswerState}
+        handleOpen={handleModalOpen}
+        content={dialogContent}
         title={dialogTitle}
       />
       <Select
