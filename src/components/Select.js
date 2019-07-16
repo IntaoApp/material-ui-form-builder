@@ -209,6 +209,13 @@ function IntegrationReactSelect({
 
   useEffect(
     () => {
+      setValue(selectedValue);
+    },
+    [selectedValue]
+  );
+
+  useEffect(
+    () => {
       switch (answerState) {
         case 'cancel':
           setValue(prevSelected);
