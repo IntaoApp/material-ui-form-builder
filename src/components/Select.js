@@ -1,5 +1,5 @@
 import _ from 'lodash';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import RelativePortal from 'react-relative-portal';
 import { shape, string, func, number, oneOfType, arrayOf } from 'prop-types';
 import classNames from 'classnames';
@@ -201,47 +201,8 @@ function IntegrationReactSelect({
   dialogTitle,
   ...others
 }) {
-  const [prevSelected, setPrevSelected] = useState(selectedValue);
-  const [localValue, setLocalValue] = useState(selectedValue);
-  const [valueState, setValue] = useState(selectedValue);
-  const [answerState, setAnswerState] = useState('');
-  const [handleModalOpen, setHandleModalOpen] = useState(false);
-
-  useEffect(
-    () => {
-      setValue(selectedValue);
-    },
-    [selectedValue]
-  );
-
-  useEffect(
-    () => {
-      switch (answerState) {
-        case 'cancel':
-          setValue(prevSelected);
-          break;
-        case 'ok':
-          setPrevSelected(localValue);
-          setValue(localValue);
-          break;
-        default:
-          break;
-      }
-      setHandleModalOpen(false);
-      setAnswerState('');
-    },
-    [answerState]
-  );
-
-  const ConditionalModalHandler = (value, isActive) => {
-    if (prevSelected !== value && isActive) {
-      setHandleModalOpen(true);
-      setLocalValue(value);
-    }
-    setValue(value);
-  };
-
   const name = field.name || 'field';
+  const dialogActive = field.dialogActive || false;
 
   const key = field.key || field.name || 'key';
   const errorText = _.get(errors, key, false);
@@ -260,11 +221,55 @@ function IntegrationReactSelect({
     }),
   };
 
+  const [valueState, setValue] = useState(selectedValue);
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const prevValue = useRef(selectedValue);
+
+  useEffect(
+    () => {
+      setValue(selectedValue);
+    },
+    [selectedValue]
+  );
+
+  useEffect(
+    () => {
+      onChange(valueState);
+    },
+    [valueState]
+  );
+
+  const handleUserChoice = (answer) => {
+    switch (answer) {
+      case 'cancel':
+        setValue(prevValue.current);
+        break;
+      case 'ok':
+        prevValue.current = valueState;
+        break;
+      default:
+        break;
+    }
+    setModalOpen(false);
+  };
+
+  const handleOnChange = (value) => {
+    const handelerValue = field.multiple ? value.map((item) => item.value) : value.value;
+    setValue(handelerValue);
+
+    if (dialogActive) {
+      setModalOpen(true);
+    } else {
+      prevValue.current = handelerValue;
+    }
+  };
+
   return (
     <div className={classes.root}>
       <AlertDialog
-        userChoice={setAnswerState}
-        handleOpen={handleModalOpen}
+        userChoice={handleUserChoice}
+        open={modalOpen}
         content={dialogContent}
         title={dialogTitle}
       />
@@ -280,19 +285,11 @@ function IntegrationReactSelect({
         options={options}
         components={components}
         value={formatSelectedValue(valueState, options)}
-        onChange={(value) => {
-          if (field.multiple) {
-            ConditionalModalHandler(value.map((item) => item.value), false);
-            onChange(value.map((item) => item.value));
-          } else {
-            ConditionalModalHandler(value.value, dialogActive);
-            onChange(value.value);
-          }
-        }}
+        onChange={handleOnChange}
         // placeholder=""
         isMulti={field.multiple}
         {...others}
-        // menuIsOpen={true}
+      // menuIsOpen={true}
       />
       {errorText && (
         <span
