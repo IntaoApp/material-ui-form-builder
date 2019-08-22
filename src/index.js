@@ -119,9 +119,6 @@ export default class Form extends React.Component {
     const name = field.name || 'field';
     const disabled = field.disabled || false;
     const emoji = field.emoji || false;
-    const dialogActive = field.dialogActive || false;
-    const dialogContent = field.dialogContent || null;
-    const dialogTitle = field.dialogTitle || null; 
 
     switch (type) {
       case 'text':
@@ -178,9 +175,6 @@ export default class Form extends React.Component {
             errors={this.props.errors}
             selectedValue={this.getProperty(key, defaultValue, field.multiple ? [] : '')}
             onChange={(value) => this.handleChange(key, value)}
-            dialogActive={dialogActive}
-            dialogContent={dialogContent}
-            dialogTitle={dialogTitle}
           />
         );
 

@@ -196,13 +196,12 @@ function IntegrationReactSelect({
   errors,
   onChange,
   classes,
-  dialogActive,
-  dialogContent,
-  dialogTitle,
   ...others
 }) {
   const name = field.name || 'field';
   const dialogActive = field.dialogActive || false;
+  const dialogContent = field.dialogContent || null;
+  const dialogTitle = field.dialogTitle || null;
 
   const key = field.key || field.name || 'key';
   const errorText = _.get(errors, key, false);
