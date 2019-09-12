@@ -222,6 +222,7 @@ function IntegrationReactSelect({
 
   const [value, setValue] = useState(selectedValue);
   const [modalOpen, setModalOpen] = useState(false);
+  const [localValue, setLocalValue] = useState(selectedValue);
 
   const prevValue = useRef(selectedValue);
 
@@ -242,10 +243,12 @@ function IntegrationReactSelect({
   const handleUserChoice = (answer) => {
     switch (answer) {
       case 'cancel':
+        setLocalValue(prevValue.current);
         setValue(prevValue.current);
         break;
       case 'ok':
-        prevValue.current = valueState;
+        prevValue.current = localValue;
+        setValue(localValue);
         break;
       default:
         break;
@@ -255,12 +258,13 @@ function IntegrationReactSelect({
 
   const handleOnChange = (value) => {
     const handelerValue = field.multiple ? value.map((item) => item.value) : value.value;
-    setValue(handelerValue);
+    setLocalValue(handelerValue);
 
     if (dialogActive && prevValue.current !== handelerValue) {
       setModalOpen(true);
     } else {
       prevValue.current = handelerValue;
+      setValue(handelerValue);
     }
   };
 
