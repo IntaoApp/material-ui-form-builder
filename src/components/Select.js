@@ -257,7 +257,7 @@ function IntegrationReactSelect({
     const handelerValue = field.multiple ? value.map((item) => item.value) : value.value;
     setValue(handelerValue);
 
-    if (dialogActive) {
+    if (dialogActive && prevValue.current !== handelerValue) {
       setModalOpen(true);
     } else {
       prevValue.current = handelerValue;
