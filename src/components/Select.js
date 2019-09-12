@@ -220,7 +220,7 @@ function IntegrationReactSelect({
     }),
   };
 
-  const [valueState, setValue] = useState(selectedValue);
+  const [value, setValue] = useState(selectedValue);
   const [modalOpen, setModalOpen] = useState(false);
 
   const prevValue = useRef(selectedValue);
@@ -234,9 +234,9 @@ function IntegrationReactSelect({
 
   useEffect(
     () => {
-      onChange(valueState);
+      onChange(value);
     },
-    [valueState]
+    [value]
   );
 
   const handleUserChoice = (answer) => {
@@ -283,7 +283,7 @@ function IntegrationReactSelect({
         }}
         options={options}
         components={components}
-        value={formatSelectedValue(valueState, options)}
+        value={formatSelectedValue(value, options)}
         onChange={handleOnChange}
         // placeholder=""
         isMulti={field.multiple}
