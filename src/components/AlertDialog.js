@@ -14,6 +14,7 @@ function AlertDialog({ userChoice, open, content, title }) {
         open={open}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
+        data-cy="alertDialog"
       >
         <DialogTitle id="alert-dialog-title">{title ? title : null}</DialogTitle>
         <DialogContent>
@@ -22,10 +23,15 @@ function AlertDialog({ userChoice, open, content, title }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => userChoice('cancel')} color="primary">
+          <Button onClick={() => userChoice('cancel')} color="primary" data-cy="alertDialogCancel">
             Cancel
           </Button>
-          <Button onClick={() => userChoice('ok')} color="primary" autoFocus>
+          <Button
+            onClick={() => userChoice('ok')}
+            color="primary"
+            autoFocus
+            data-cy="alertDialogOk"
+          >
             Ok
           </Button>
         </DialogActions>

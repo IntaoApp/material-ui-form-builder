@@ -272,6 +272,7 @@ export default class Form extends React.Component {
               variant="contained"
               onClick={() => this.props.saveForm(this.state.values)}
               style={{ display: 'block', margin: '0 auto', width: '30%' }}
+              data-cy="saveButton"
             >
               {'Save'}
             </Button>

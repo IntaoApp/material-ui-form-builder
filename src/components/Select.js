@@ -269,7 +269,7 @@ function IntegrationReactSelect({
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-cy={key}>
       <AlertDialog
         userChoice={handleUserChoice}
         open={modalOpen}

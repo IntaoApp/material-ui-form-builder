@@ -36,7 +36,7 @@ const CustomSelect = ({ field, selectedValues, errors, onChange, ...others }) =>
   const items = field.items || [];
 
   return (
-    <FormControl style={{ width: '100%' }} error={!!errorText}>
+    <FormControl style={{ width: '100%' }} error={!!errorText} data-cy={key}>
       <InputLabel htmlFor={`${getName(name)}`}>{getName(name)}</InputLabel>
       <Select
         key={inputKey}

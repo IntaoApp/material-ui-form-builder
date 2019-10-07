@@ -204,7 +204,7 @@ function IntegrationReactSelect({ field, errors, selectedValue, onChange, classe
   };
 
   return (
-    <div className={classes.root}>
+    <div className={classes.root} data-cy={key}>
       <AsyncSelect
         classes={classes}
         styles={selectStyles}
