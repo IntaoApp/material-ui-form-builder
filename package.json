@@ -39,7 +39,7 @@
     "@babel/runtime": "7.3.4",
     "babel-loader": "8.0.5",
     "onchange": "5.2.0",
-    "webpack": "2.6.1",
+    "webpack": "5.75.0",
     "webpack-dev-server": "2.4.5"
   }
 }
